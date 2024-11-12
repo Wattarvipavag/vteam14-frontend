@@ -47,5 +47,5 @@ docker compose down
 #### **Run the application**
 
 ```bash
-npm start
+npm run dev
 ```
