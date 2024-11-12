@@ -1,1 +1,9 @@
-
+services:
+    client:
+        build: .
+        container_name: 'vteam14-frontend'
+        ports:
+            - '5173:5173'
+        volumes:
+            - .:/client
+            - /client/node_modules
