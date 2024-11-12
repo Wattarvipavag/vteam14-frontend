@@ -28,6 +28,12 @@ npm install
 docker compose up -d
 ```
 
+or
+
+```bash
+docker compose up
+```
+
 #### **Stop the application**
 
 ```bash
