@@ -3,7 +3,7 @@
 #### **Clone the repository**
 
 ```bash
-git clone git@github.com:jkberiksson/vteam14-frontend.git
+git clone git@github.com:Wattarvipavag/vteam14-frontend.git
 ```
 
 #### **Change directory**
