@@ -1,0 +1,107 @@
+.login-form {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 10px $shadow;
+    width: 100%;
+    max-width: 400px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    .login-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: $neutral-black;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            color: $neutral-gray;
+            margin-bottom: 0.5rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: 1px solid $neutral-gray;
+            border-radius: 5px;
+            transition: border-color 0.3s ease;
+
+            &:focus {
+                outline: none;
+                border-color: $primary-green;
+            }
+        }
+    }
+
+    .login-button {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        color: white;
+        background-color: $primary-green;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: $primary-green-dark;
+        }
+    }
+
+    .divider {
+        margin: 1.5rem 0;
+        text-align: center;
+        color: $neutral-gray;
+        font-size: 0.9rem;
+        position: relative;
+
+        span {
+            background: white;
+            padding: 0 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: $neutral-gray;
+            z-index: 0;
+        }
+    }
+
+    .github-login-button {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        color: white;
+        background-color: $neutral-black;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: darken($neutral-black, 10%);
+        }
+    }
+}
