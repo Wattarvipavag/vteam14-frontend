@@ -1,28 +1,28 @@
 // Primary Colors
 $primary-green: #34c759; // Vibrant green for primary actions like buttons
-$primary-green-dark: #28a745; // Darker green for hover states or accents
-$primary-green-light: #b9fbc0; // Lighter green for backgrounds or highlights
+$primary-green-dark: #248f3f; // Darker green for hover states or accents
+$primary-green-light: #d6f7e8; // Lighter green for highlights
 
 // Secondary Colors
-$secondary-blue: #007aff; // Blue for secondary actions or links
-$secondary-blue-light: #d0e8ff; // Light blue for hover states or backgrounds
+$secondary-blue: #0066cc; // More vibrant and professional blue for secondary actions
+$secondary-blue-light: #b3d9ff; // Light blue for hover states or backgrounds
 
 // Neutral Colors
-$neutral-black: #1c1c1e; // Almost black for text or primary content
-$neutral-gray: #8e8e93; // Medium gray for secondary text or icons
-$neutral-light-gray: #f2f2f7; // Very light gray for backgrounds
+$neutral-black: #2c2c2c; // Darker text color for readability
+$neutral-gray: #7e7e7e; // Softer gray for secondary text
+$neutral-light-gray: #f7f7f7; // Very light gray background for better contrast
 
 // Accent Colors
-$accent-yellow: #ffcc00; // Yellow for warnings or important highlights
-$accent-red: #ff3b30; // Red for errors or destructive actions
+$accent-yellow: #f9a825; // Yellow with a warm feel for highlights
+$accent-red: #f44336; // Red for error messages, more vibrant
 
 // Gradients
 $gradient-green: linear-gradient(90deg, $primary-green, $primary-green-light);
 $gradient-blue: linear-gradient(90deg, $secondary-blue, $secondary-blue-light);
 
 // Shadow and Transparency
-$shadow: rgba(0, 0, 0, 0.1); // Light shadow for cards and modals
+$shadow: rgba(0, 0, 0, 0.15); // A slightly heavier shadow for more depth
 $overlay: rgba(0, 0, 0, 0.5); // Transparent overlay for modals
 
 // Fonts
-$primary-font: 'DM Sans';
+$primary-font: 'DM Sans', sans-serif;

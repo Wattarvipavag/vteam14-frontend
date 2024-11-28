@@ -1,19 +1,25 @@
+import { useNavigate } from 'react-router-dom';
+import { PiSignOutBold } from 'react-icons/pi';
+
 import logo from '../images/logo.png';
-import { Link } from 'react-router-dom';
 
 export default function Header() {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        navigate('/');
+    };
+
     return (
         <header className='header'>
-            <div className='header-content'>
-                <img src={logo} alt='Logo' className='header-logo' />
-                <h1 className='header-title'>Watt är vi på väg?</h1>
+            <div className='header-logo'>
+                <img src={logo} alt='Logo' />
+                <h1>Watt är vi på väg?</h1>
             </div>
-            <nav>
-                <Link to='/'>Home</Link>
-                <Link to='/admin-dashboard'>Admin</Link>
-                <Link to='/user-dashboard'>User</Link>
-                <Link to='/login'>Login</Link>
-            </nav>
+            <button className='logout-button' onClick={handleLogout}>
+                <PiSignOutBold />
+                Logga ut
+            </button>
         </header>
     );
 }

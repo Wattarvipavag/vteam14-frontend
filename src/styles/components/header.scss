@@ -1,0 +1,52 @@
+.header {
+    background-color: $primary-green-light;
+    height: 10dvh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 6px $shadow;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+
+    .header-logo {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .header-logo img {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        box-shadow: 0 4px 6px $shadow;
+    }
+
+    .header-logo h1 {
+        font-family: $primary-font;
+        font-size: 1.4rem;
+        font-weight: 500;
+        color: $neutral-black;
+    }
+
+    .logout-button {
+        background-color: $neutral-black;
+        color: white;
+        font-size: 1.1rem;
+        padding: 0.6rem 1.4rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.8rem;
+        transition: all 0.3s ease;
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
