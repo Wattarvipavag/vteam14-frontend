@@ -72,4 +72,11 @@
     background-color: white;
     padding: 20px;
     box-shadow: 0 4px 6px $shadow;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    h2 {
+        margin-bottom: 20px;
+    }
 }

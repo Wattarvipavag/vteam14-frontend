@@ -1,0 +1,135 @@
+.admin-dashboard-overview-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.admin-dashboard-overview-card {
+    width: 300px;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px $shadow;
+}
+
+.admin-dashboard-overview-card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.admin-dashboard-overview-card-icon {
+    font-size: 2rem;
+    color: $primary-green;
+}
+
+.admin-dashboard-overview-card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $neutral-black;
+}
+
+.admin-dashboard-overview-card-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-dashboard-overview-card-value {
+    font-size: 2rem;
+    font-weight: 600;
+    color: $neutral-black;
+}
+
+.key-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.key-metrics-item {
+    background-color: #e5f8e3;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.key-metrics-item h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.key-metrics-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #4b9f43;
+}
+
+.key-metrics-expanded {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.activity-overview {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.activity-overview h3 {
+    margin-bottom: 10px;
+}
+
+.activity-list {
+    list-style: none;
+    padding: 0;
+}
+
+.activity-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.activity-list li svg {
+    margin-right: 10px;
+    color: #0077cc;
+}
+
+.alerts {
+    background-color: #fff3f3;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.alerts h3 {
+    margin-bottom: 10px;
+}
+
+.alert-list {
+    list-style: none;
+    padding: 0;
+}
+
+.alert-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.alert-list .alert-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.alert-list .alert-item p {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.alert-list .alert-icon {
+    color: #e53e3e;
+    font-size: 1.5rem;
+}
