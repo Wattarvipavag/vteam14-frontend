@@ -7,8 +7,9 @@ import Overview from './pages/admin/Overview';
 import Cities from './pages/admin/Cities';
 import Users from './pages/admin/Users';
 import Scooters from './pages/admin/Scooters';
-import Parking from './pages/admin/Parking';
-import Charging from './pages/admin/Charging';
+import Parkings from './pages/admin/Parkings';
+import Chargings from './pages/admin/Chargings';
+import User from './pages/admin/User';
 
 function App() {
     return (
@@ -19,9 +20,10 @@ function App() {
                     <Route index element={<Overview />} />
                     <Route path='cities' element={<Cities />} />
                     <Route path='users' element={<Users />} />
+                    <Route path='users/:id' element={<User />} />
                     <Route path='scooters' element={<Scooters />} />
-                    <Route path='parking' element={<Parking />} />
-                    <Route path='charging' element={<Charging />} />
+                    <Route path='parkings' element={<Parkings />} />
+                    <Route path='chargings' element={<Chargings />} />
                 </Route>
             </Routes>
         </div>

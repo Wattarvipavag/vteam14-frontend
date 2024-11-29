@@ -2,12 +2,12 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: $secondary-font, serif;
 }
 
 html,
 body {
     line-height: 1.15;
-    font-family: $primary-font, serif;
     background-color: $neutral-light-gray;
     color: $neutral-black;
 }
