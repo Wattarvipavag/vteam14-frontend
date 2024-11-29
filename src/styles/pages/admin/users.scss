@@ -1,6 +1,13 @@
 .admin-dashboard-users {
     display: flex;
     flex-direction: column;
+    gap: 20px;
+    overflow: hidden;
+}
+
+.admin-dashboard-users-container {
+    display: flex;
+    flex-direction: column;
     overflow: auto;
 }
 
@@ -19,7 +26,7 @@
     }
 }
 
-.admin-dashboard-user-card {
+.admin-dashboard-users-card {
     display: flex;
     padding: 20px 10px;
     border-bottom: 1px solid $neutral-light-gray;
@@ -33,10 +40,6 @@
     &:hover {
         background-color: $neutral-light-gray;
     }
-}
-
-.search-container {
-    text-align: center;
 }
 
 .search-input {
