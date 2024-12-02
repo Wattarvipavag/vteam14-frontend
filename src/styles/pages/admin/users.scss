@@ -1,0 +1,55 @@
+.admin-dashboard-users {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow: hidden;
+}
+
+.admin-dashboard-users-container {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.admin-dashboard-users-header {
+    background-color: $primary-green-light;
+    display: flex;
+    padding: 20px 10px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    border-bottom: 1px solid $neutral-light-gray;
+
+    div {
+        flex: 1;
+        font-weight: 600;
+    }
+}
+
+.admin-dashboard-users-card {
+    display: flex;
+    padding: 20px 10px;
+    border-bottom: 1px solid $neutral-light-gray;
+    cursor: pointer;
+
+    p {
+        flex: 1;
+        color: $neutral-black;
+    }
+
+    &:hover {
+        background-color: $neutral-light-gray;
+    }
+}
+
+.search-input {
+    padding: 15px;
+    width: 100%;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.search-input:focus {
+    outline: none;
+}

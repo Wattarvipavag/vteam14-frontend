@@ -48,13 +48,13 @@ function AdminNav() {
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink to='/admin/parking'>
+                    <NavLink to='/admin/parkings'>
                         <TbParking className='icon' />
                         Parkeringszoner
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink to='/admin/charging'>
+                    <NavLink to='/admin/chargings'>
                         <TbChargingPile className='icon' />
                         Laddstationer
                     </NavLink>
