@@ -96,6 +96,32 @@
         align-items: center;
         justify-content: center;
         gap: 0.6rem;
-        transition: background-color 0.3s ease;
+    }
+
+    .google-login-button {
+        width: 100%;
+        padding: 0.8rem;
+        font-size: 1.1rem;
+        color: white;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+        background-color: #db4437;
+        border: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        gap: 0.6rem;
+    }
+
+    .error-message {
+        margin-top: 1rem;
+        padding: 0.8rem;
+        font-size: 0.9rem;
+        color: #d32f2f;
+        background-color: #fdecea;
+        border: 1px solid #f44336;
+        border-radius: 6px;
+        text-align: center;
     }
 }

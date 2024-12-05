@@ -1,6 +1,8 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { TbLayoutDashboard, TbMapPin, TbUsers, TbScooter, TbParking, TbChargingPile } from 'react-icons/tb';
 import Header from '../components/Header';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../config/firebaseConfig';
 
 export default function AdminPage() {
     return (
@@ -17,10 +19,13 @@ export default function AdminPage() {
 }
 
 function AdminNav() {
+    const [user] = useAuthState(auth);
+
     return (
         <div className='admin-nav'>
             <div className='admin-nav-header'>
-                <h2>Admin</h2>
+                <h2>{user?.displayName}</h2>
+                <img src={user?.photoURL} alt='profile-picture' />
             </div>
             <ul className='admin-nav-links'>
                 <li>

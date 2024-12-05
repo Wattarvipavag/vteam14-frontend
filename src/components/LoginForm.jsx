@@ -1,12 +1,27 @@
-import { FaGithub } from 'react-icons/fa';
+import { useEffect } from 'react';
+import { FaGoogle, FaGithub } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../config/firebaseConfig';
+import { useSignInWithGithub, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 
 export default function LoginForm() {
+    const [signInWithGoogle, googleUser, googleLoading, googleError] = useSignInWithGoogle(auth);
+    const [signInWithGithub, githubUser, githubLoading, githubError] = useSignInWithGithub(auth);
     const navigate = useNavigate();
 
-    const handleLogin = () => {
-        navigate('/admin');
+    const handleGoogleLogin = async () => {
+        await signInWithGoogle();
     };
+
+    const handleGithubLogin = async () => {
+        await signInWithGithub();
+    };
+
+    useEffect(() => {
+        if (googleUser || githubUser) {
+            navigate('/admin');
+        }
+    }, [googleUser, githubUser]);
 
     return (
         <form className='login-form'>
@@ -25,10 +40,16 @@ export default function LoginForm() {
             <div className='divider'>
                 <span>eller</span>
             </div>
-            <button type='button' className='github-login-button' onClick={handleLogin}>
-                <FaGithub />
-                Logga In Med GitHub
+            <button type='button' className='google-login-button' onClick={handleGoogleLogin} disabled={googleLoading}>
+                <FaGoogle />
+                {googleLoading ? 'Loading...' : 'Logga In Med Google'}
             </button>
+            <button type='button' className='github-login-button' onClick={handleGithubLogin} disabled={githubLoading}>
+                <FaGithub />
+                {githubLoading ? 'Loading...' : 'Logga In Med GitHub'}
+            </button>
+            {googleError && <p className='error-message'>Google Error: {googleError.message}</p>}
+            {githubError && <p className='error-message'>GitHub Error: {githubError.message}</p>}
         </form>
     );
 }
