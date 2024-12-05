@@ -3,9 +3,11 @@ import { FaGithub } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../config/firebaseConfig';
 import { useSignInWithGithub } from 'react-firebase-hooks/auth';
+import { useRole } from '../contexts/RoleContext';
 
 export default function LoginForm() {
     const [signInWithGithub, githubUser, githubLoading, githubError] = useSignInWithGithub(auth);
+    const [role, setRole] = useRole();
     const navigate = useNavigate();
 
     const handleGithubLogin = async () => {
@@ -14,7 +16,7 @@ export default function LoginForm() {
 
     useEffect(() => {
         if (githubUser) {
-            navigate('/admin');
+            navigate(`/${role}`);
         }
     }, [githubUser]);
 
