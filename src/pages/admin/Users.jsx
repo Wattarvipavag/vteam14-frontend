@@ -26,24 +26,22 @@ export default function Users() {
     return (
         <>
             <h2>Användare</h2>
-            <div className='admin-dashboard-users'>
-                <div className='search-container'>
-                    <input type='text' placeholder='Sök efter användare...' className='search-input' />
-                </div>
-                <div className='admin-dashboard-users-container'>
-                    <div className='admin-dashboard-users-header'>
+            <div className='admin-users'>
+                <input type='text' placeholder='Sök efter användare...' />
+                <ul>
+                    <li className='user-header'>
                         <div>Namn</div>
                         <div>Email</div>
-                    </div>
+                    </li>
                     {users.map((user) => (
-                        <Link to={`/admin/users/${user.id}`} key={user.id}>
-                            <div className='admin-dashboard-users-card'>
+                        <li className='user-card'>
+                            <Link to={`/admin/users/${user.id}`} key={user.id}>
                                 <p>{user.name}</p>
                                 <p>{user.email}</p>
-                            </div>
-                        </Link>
+                            </Link>
+                        </li>
                     ))}
-                </div>
+                </ul>
             </div>
         </>
     );

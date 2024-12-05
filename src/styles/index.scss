@@ -5,10 +5,12 @@
 
 @import './components/header.scss';
 @import './components/loginForm.scss';
+@import './components/sideNav.scss';
 @import './components/spinner.scss';
 
-@import './pages/adminPage.scss';
 @import './pages/homePage.scss';
+@import './pages/adminPage.scss';
+@import './pages/customerPage.scss';
 
 @import './pages/admin/overview.scss';
 @import './pages/admin/users.scss';

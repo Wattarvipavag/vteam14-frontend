@@ -28,6 +28,16 @@ video {
 }
 
 .container {
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.dashboard {
+    display: flex;
+    gap: 20px;
+    height: 100%;
     padding: 20px;
-    height: 90dvh;
+    overflow: hidden;
 }

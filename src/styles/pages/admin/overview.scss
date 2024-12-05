@@ -1,48 +1,41 @@
-.admin-dashboard-overview {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.admin-dashboard-overview-cards {
+.admin-overview {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-}
 
-.admin-dashboard-overview-card {
-    width: 300px;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 6px $shadow;
-}
+    .card {
+        width: 300px;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 6px $shadow;
 
-.admin-dashboard-overview-card-header {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 15px;
-}
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
 
-.admin-dashboard-overview-card-icon {
-    font-size: 2rem;
-    color: $primary-green;
-}
+            div {
+                font-size: 2rem;
+                color: $primary-green;
+            }
 
-.admin-dashboard-overview-card-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: $neutral-black;
-}
+            h3 {
+                font-size: 1.25rem;
+                font-weight: 700;
+                color: $neutral-black;
+            }
+        }
+        .card-body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
-.admin-dashboard-overview-card-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.admin-dashboard-overview-card-value {
-    font-size: 2rem;
-    font-weight: 600;
-    color: $neutral-black;
+            p {
+                font-size: 2rem;
+                font-weight: 600;
+                color: $neutral-black;
+            }
+        }
+    }
 }

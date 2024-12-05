@@ -37,7 +37,7 @@ function App() {
     }
 
     return (
-        <div>
+        <>
             <Routes>
                 <Route path='/' element={<HomePage />} />
                 <Route path='/admin' element={<AdminPage />}>
@@ -50,7 +50,7 @@ function App() {
                     <Route path='chargings' element={<Chargings />} />
                 </Route>
             </Routes>
-        </div>
+        </>
     );
 }
 

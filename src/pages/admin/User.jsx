@@ -8,7 +8,7 @@ export default function User() {
     return (
         <>
             <h2>Användare {id}</h2>
-            <div className='admin-dashboard-user'>
+            <div className='admin-user'>
                 <button onClick={() => navigate('/admin/users')}>
                     <TbArrowBackUp />
                     Tillbaka Till Användare
