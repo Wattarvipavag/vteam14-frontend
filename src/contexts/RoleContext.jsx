@@ -1,11 +1,40 @@
-import { createContext, useState, useContext } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../config/firebaseConfig';
 
 const RoleContext = createContext();
 
 export const RoleContextProvider = ({ children }) => {
-    const [role, setRole] = useState('admin');
+    const [user, loading] = useAuthState(auth);
+    const [role, setRole] = useState(null);
+    const [isLoadingRole, setIsLoadingRole] = useState(true);
 
-    return <RoleContext.Provider value={[role, setRole]}>{children}</RoleContext.Provider>;
+    const getUserRole = async (id) => {
+        const res = await axios.get(`http://localhost:8000/api/users/oauth/${id}`);
+        return res.data.user.role;
+    };
+
+    useEffect(() => {
+        const fetchRole = async () => {
+            if (loading) return;
+            if (user) {
+                try {
+                    const role = await getUserRole(user.uid);
+                    setRole(role);
+                } catch (error) {
+                    console.error('Error fetching role:', error.message);
+                }
+            } else {
+                setRole(null);
+            }
+            setIsLoadingRole(false);
+        };
+
+        fetchRole();
+    }, [user, loading]);
+
+    return <RoleContext.Provider value={{ role, isLoadingRole, setRole }}>{children}</RoleContext.Provider>;
 };
 
 export const useRole = () => {

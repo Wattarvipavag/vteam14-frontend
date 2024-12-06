@@ -1,3 +1,7 @@
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useRole } from './contexts/RoleContext';
+import Spinner from './components/Spinner';
 import HomePage from './pages/HomePage';
 import AdminPage from './pages/AdminPage';
 import CustomerPage from './pages/CustomerPage';
@@ -11,54 +15,44 @@ import User from './pages/admin/User';
 import Profile from './pages/customer/Profile';
 import History from './pages/customer/History';
 import Payments from './pages/customer/Payments';
-import Spinner from './components/Spinner';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from './config/firebaseConfig';
-import { useRole } from './contexts/RoleContext';
 
 export default function App() {
-    const [user, loading] = useAuthState(auth);
-    const [role, setRole] = useRole();
+    const { role, isLoadingRole } = useRole();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!loading) {
-            if (user) {
-                navigate(`/${role}`);
-            } else {
-                navigate('/');
-            }
+        if (!isLoadingRole && role) {
+            navigate(`/${role}`);
+        } else if (!isLoadingRole && !role) {
+            navigate('/');
         }
-    }, [loading]);
+    }, [role, isLoadingRole]);
 
-    if (loading) {
+    if (isLoadingRole) {
         return <Spinner />;
     }
 
     return (
-        <>
-            <Routes>
-                <Route path='/' element={<HomePage />} />
-                {role === 'admin' ? (
-                    <Route path='/admin' element={<AdminPage />}>
-                        <Route index element={<Overview />} />
-                        <Route path='cities' element={<Cities />} />
-                        <Route path='users' element={<Users />} />
-                        <Route path='users/:id' element={<User />} />
-                        <Route path='scooters' element={<Scooters />} />
-                        <Route path='parkings' element={<Parkings />} />
-                        <Route path='chargings' element={<Chargings />} />
-                    </Route>
-                ) : (
-                    <Route path='/customer' element={<CustomerPage />}>
-                        <Route index element={<Profile />} />
-                        <Route path='history' element={<History />} />
-                        <Route path='payments' element={<Payments />} />
-                    </Route>
-                )}
-            </Routes>
-        </>
+        <Routes>
+            <Route path='/' element={<HomePage />} />
+            {role === 'admin' && (
+                <Route path='/admin' element={<AdminPage />}>
+                    <Route index element={<Overview />} />
+                    <Route path='cities' element={<Cities />} />
+                    <Route path='users' element={<Users />} />
+                    <Route path='users/:id' element={<User />} />
+                    <Route path='scooters' element={<Scooters />} />
+                    <Route path='parkings' element={<Parkings />} />
+                    <Route path='chargings' element={<Chargings />} />
+                </Route>
+            )}
+            {role === 'customer' && (
+                <Route path='/customer' element={<CustomerPage />}>
+                    <Route index element={<Profile />} />
+                    <Route path='history' element={<History />} />
+                    <Route path='payments' element={<Payments />} />
+                </Route>
+            )}
+        </Routes>
     );
 }

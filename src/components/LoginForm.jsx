@@ -4,21 +4,39 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from '../config/firebaseConfig';
 import { useSignInWithGithub } from 'react-firebase-hooks/auth';
 import { useRole } from '../contexts/RoleContext';
+import axios from 'axios';
 
 export default function LoginForm() {
     const [signInWithGithub, githubUser, githubLoading, githubError] = useSignInWithGithub(auth);
-    const [role, setRole] = useRole();
+    const { role, setRole } = useRole();
     const navigate = useNavigate();
 
     const handleGithubLogin = async () => {
-        await signInWithGithub();
+        try {
+            const res = await signInWithGithub();
+            const oauthId = res.user.uid;
+            const name = res._tokenResponse.displayName;
+            const email = res._tokenResponse.email;
+            const profileImage = res._tokenResponse.photoUrl;
+
+            const data = await axios.post('http://localhost:8000/api/login', {
+                oauthId,
+                name,
+                email,
+                profileImage,
+            });
+
+            setRole(data.data.user.role);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     useEffect(() => {
-        if (githubUser) {
+        if (githubUser && role) {
             navigate(`/${role}`);
         }
-    }, [githubUser]);
+    }, [githubUser, role]);
 
     return (
         <form className='login-form'>

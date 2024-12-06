@@ -15,7 +15,7 @@ import { auth } from '../config/firebaseConfig';
 import { useRole } from '../contexts/RoleContext';
 
 export default function SideNav() {
-    const [role, setRole] = useRole();
+    const { role } = useRole();
     return role === 'admin' ? <AdminNav /> : <CustomerNav />;
 }
 
