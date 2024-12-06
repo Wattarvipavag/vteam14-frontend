@@ -1,12 +1,22 @@
+import { useEffect } from 'react';
 import { FaGithub } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../config/firebaseConfig';
+import { useSignInWithGithub } from 'react-firebase-hooks/auth';
 
 export default function LoginForm() {
+    const [signInWithGithub, githubUser, githubLoading, githubError] = useSignInWithGithub(auth);
     const navigate = useNavigate();
 
-    const handleLogin = () => {
-        navigate('/admin');
+    const handleGithubLogin = async () => {
+        await signInWithGithub();
     };
+
+    useEffect(() => {
+        if (githubUser) {
+            navigate('/admin');
+        }
+    }, [githubUser]);
 
     return (
         <form className='login-form'>
@@ -25,10 +35,12 @@ export default function LoginForm() {
             <div className='divider'>
                 <span>eller</span>
             </div>
-            <button type='button' className='github-login-button' onClick={handleLogin}>
+
+            <button type='button' className='github-login-button' onClick={handleGithubLogin} disabled={githubLoading}>
                 <FaGithub />
-                Logga In Med GitHub
+                {githubLoading ? 'Loading...' : 'Logga In Med GitHub'}
             </button>
+            {githubError && <p className='error-message'>GitHub Error: {githubError.message}</p>}
         </form>
     );
 }

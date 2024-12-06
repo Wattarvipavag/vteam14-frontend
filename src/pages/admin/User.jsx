@@ -8,10 +8,10 @@ export default function User() {
     return (
         <>
             <h2>Användare {id}</h2>
-            <div className='admin-dashboard-user'>
-                <button onClick={() => navigate(-1)}>
+            <div className='admin-user'>
+                <button onClick={() => navigate('/admin/users')}>
                     <TbArrowBackUp />
-                    Tillbaka
+                    Tillbaka Till Användare
                 </button>
                 <p>Här kommer info om användaren!</p>
             </div>

@@ -1,4 +1,3 @@
-// LoginForm styling improvements
 .login-form {
     background: $neutral-light-gray;
     border-radius: 12px;
@@ -84,18 +83,35 @@
     }
 
     .github-login-button {
+        background-color: $neutral-black;
         width: 100%;
         padding: 0.8rem;
         font-size: 1.1rem;
         color: white;
-        background-color: $neutral-black;
         border: none;
         border-radius: 6px;
-        cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
+        cursor: pointer;
         gap: 0.6rem;
-        transition: background-color 0.3s ease;
+        transition:
+            background-color 0.3s ease,
+            transform 0.2s ease;
+
+        &:hover {
+            background-color: darken($neutral-black, 10%);
+        }
+    }
+
+    .error-message {
+        margin-top: 1rem;
+        padding: 0.8rem;
+        font-size: 0.9rem;
+        color: #d32f2f;
+        background-color: #fdecea;
+        border: 1px solid #f44336;
+        border-radius: 6px;
+        text-align: center;
     }
 }

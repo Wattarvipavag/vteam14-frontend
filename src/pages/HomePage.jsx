@@ -10,9 +10,8 @@ export default function HomePage() {
                     Välkommen till <span className='brand'>Watt är vi på väg?</span>
                 </h1>
                 <p>
-                    <span className='brand'>Watt är vi på väg?</span> är din ultimata lösning för hållbar och smidig transport i staden.
-                    Utforska vår app för att hitta närmaste elsparkcykel, spåra din resa och bidra till en grönare framtid. Enkel, snabb och
-                    miljövänlig.
+                    Din ultimata lösning för hållbar och smidig transport i staden. Utforska vår app för att hitta närmaste elsparkcykel,
+                    spåra din resa och bidra till en grönare framtid. Enkel, snabb och miljövänlig.
                 </p>
                 <ul>
                     <li>
