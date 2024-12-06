@@ -43,6 +43,14 @@ docker compose up
 docker compose down
 ```
 
+#### **If in trouble, try rebuilding with**
+
+```
+docker compose build --no-cache
+```
+
+Then try running docker compose up, again.
+
 ---
 
 ## **Local environment**
