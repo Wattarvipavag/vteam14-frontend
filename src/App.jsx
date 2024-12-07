@@ -50,7 +50,7 @@ export default function App() {
                     <Route path='payments' element={<Payments />} />
                 </Route>
             )}
-            <Route path='*' element={<Navigate to='/' replace />} />
+            <Route path='*' element={<Navigate to={role ? `/${role}` : '/'} replace />} />
         </Routes>
     );
 }

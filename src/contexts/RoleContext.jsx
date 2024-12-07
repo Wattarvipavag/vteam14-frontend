@@ -1,4 +1,3 @@
-// RoleContext.jsx
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../config/firebaseConfig';
