@@ -1,4 +1,4 @@
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useRole } from './contexts/RoleContext';
 import Spinner from './components/Spinner';
@@ -17,18 +17,15 @@ import History from './pages/customer/History';
 import Payments from './pages/customer/Payments';
 
 export default function App() {
-    const { role, isLoadingRole } = useRole();
+    const { role, loading } = useRole();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!isLoadingRole && role) {
-            navigate(`/${role}`);
-        } else if (!isLoadingRole && !role) {
-            navigate('/');
-        }
-    }, [role, isLoadingRole]);
+        if (loading) return;
+        if (role) navigate(`/${role}`);
+    }, [role, loading]);
 
-    if (isLoadingRole) {
+    if (loading) {
         return <Spinner />;
     }
 
@@ -53,6 +50,7 @@ export default function App() {
                     <Route path='payments' element={<Payments />} />
                 </Route>
             )}
+            <Route path='*' element={<Navigate to={role ? `/${role}` : '/'} replace />} />
         </Routes>
     );
 }

@@ -3,15 +3,18 @@ import { PiSignOutBold } from 'react-icons/pi';
 import logo from '../images/logo.png';
 import { useSignOut } from 'react-firebase-hooks/auth';
 import { auth } from '../config/firebaseConfig';
+import { useRole } from '../contexts/RoleContext';
 
 export default function Header() {
     const [signOut] = useSignOut(auth);
+    const { setRole } = useRole();
     const navigate = useNavigate();
 
     const handleLogout = async () => {
         const success = await signOut();
 
         if (success) {
+            setRole(null);
             navigate('/');
         }
     };
