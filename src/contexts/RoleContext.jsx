@@ -1,46 +1,43 @@
+// RoleContext.jsx
 import { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../config/firebaseConfig';
+import axios from 'axios';
 
 const RoleContext = createContext();
 
 export const RoleContextProvider = ({ children }) => {
-    const [user, loading] = useAuthState(auth);
     const [role, setRole] = useState(null);
-    const [isLoadingRole, setIsLoadingRole] = useState(true);
-
-    const getUserRole = async (id) => {
-        const res = await axios.get(`http://localhost:8000/api/users/oauth/${id}`);
-        return res.data.user.role;
-    };
+    const [loading, setLoading] = useState(true);
+    const [user, authLoading] = useAuthState(auth);
 
     useEffect(() => {
         const fetchRole = async () => {
-            if (loading) return;
+            if (authLoading) return;
+            if (role) return;
+
             if (user) {
                 try {
-                    const role = await getUserRole(user.uid);
-                    setRole(role);
+                    const res = await axios.get(`http://localhost:8000/api/users/oauth/${user.uid}`);
+                    setRole(res.data.user.role);
                 } catch (error) {
                     console.error('Error fetching role:', error.message);
+                    setRole(null);
+                } finally {
+                    setLoading(false);
                 }
             } else {
                 setRole(null);
+                setLoading(false);
             }
-            setIsLoadingRole(false);
         };
 
         fetchRole();
-    }, [user, loading]);
+    }, [user, authLoading]);
 
-    return <RoleContext.Provider value={{ role, isLoadingRole, setRole }}>{children}</RoleContext.Provider>;
+    return <RoleContext.Provider value={{ role, setRole, loading }}>{children}</RoleContext.Provider>;
 };
 
 export const useRole = () => {
-    const context = useContext(RoleContext);
-    if (!context) {
-        throw new Error('useRole must be used within a RoleContextProvider');
-    }
-    return context;
+    return useContext(RoleContext);
 };
