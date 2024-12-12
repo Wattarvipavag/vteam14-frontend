@@ -1,11 +1,31 @@
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { TbMapPin, TbUsers, TbScooter, TbParking, TbChargingPile } from 'react-icons/tb';
 
 export default function Overview() {
-    const citiesCount = 12;
-    const usersCount = 100;
-    const scootersCount = 50;
-    const parkingsCount = 14;
-    const chargingsCount = 4;
+    const [citiesCount, setCitiesCount] = useState(null);
+    const [usersCount, setUsersCount] = useState(null);
+    const [scootersCount, setScootersCount] = useState(null);
+    const [parkingsCount, setParkingsCount] = useState(null);
+    const [chargingsCount, setChargingsCount] = useState(null);
+
+    useEffect(() => {
+        const getCounters = async () => {
+            const citiesCountRes = await axios.get('http://localhost:8000/api/cities');
+            const usersCountRes = await axios.get('http://localhost:8000/api/users');
+            const scootersCountRes = await axios.get('http://localhost:8000/api/bikes');
+            const chargingsCountRes = await axios.get('http://localhost:8000/api/chargingstations');
+            const parkingsCountRes = await axios.get('http://localhost:8000/api/parkingareas');
+
+            setCitiesCount(citiesCountRes.data.length);
+            setUsersCount(usersCountRes.data.length);
+            setScootersCount(scootersCountRes.data.length);
+            setParkingsCount(parkingsCountRes.data.length);
+            setChargingsCount(chargingsCountRes.data.length);
+        };
+
+        getCounters();
+    }, []);
 
     return (
         <>
@@ -22,7 +42,9 @@ export default function Overview() {
 }
 
 function Card({ title, value, icon, backgroundColor }) {
-    return (
+    return value === null ? (
+        ''
+    ) : (
         <div className='card' style={{ backgroundColor }}>
             <div className='card-header'>
                 {icon && <div>{icon}</div>}

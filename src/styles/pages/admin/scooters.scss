@@ -1,4 +1,4 @@
-.admin-users {
+.admin-scooters {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -20,7 +20,7 @@
     ul {
         overflow: auto;
 
-        .user-header {
+        .scooter-header {
             background-color: $primary-green-light;
             display: flex;
             padding: 20px 10px;
@@ -39,7 +39,7 @@
             }
         }
 
-        .user-card a {
+        .scooter-card a {
             display: flex;
             padding: 20px 10px;
             border-bottom: 1px solid $neutral-light-gray;
@@ -56,6 +56,18 @@
 
             &:hover {
                 background-color: $neutral-light-gray;
+            }
+
+            .green {
+                color: $primary-green;
+            }
+
+            .yellow {
+                color: $accent-yellow;
+            }
+
+            .red {
+                color: $accent-red;
             }
         }
     }
