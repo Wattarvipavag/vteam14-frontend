@@ -12,9 +12,12 @@ import Scooters from './pages/admin/Scooters';
 import Parkings from './pages/admin/Parkings';
 import Chargings from './pages/admin/Chargings';
 import User from './pages/admin/User';
+import City from './pages/admin/City';
 import Profile from './pages/customer/Profile';
 import History from './pages/customer/History';
 import Payments from './pages/customer/Payments';
+import Scooter from './pages/admin/Scooter';
+import Parking from './pages/admin/Parking';
 
 export default function App() {
     const { role, loading } = useRole();
@@ -36,10 +39,13 @@ export default function App() {
                 <Route path='/admin' element={<AdminPage />}>
                     <Route index element={<Overview />} />
                     <Route path='cities' element={<Cities />} />
+                    <Route path='cities/:id' element={<City />} />
                     <Route path='users' element={<Users />} />
                     <Route path='users/:id' element={<User />} />
                     <Route path='scooters' element={<Scooters />} />
+                    <Route path='scooters/:id' element={<Scooter />} />
                     <Route path='parkings' element={<Parkings />} />
+                    <Route path='parkings/:id' element={<Parking />} />
                     <Route path='chargings' element={<Chargings />} />
                 </Route>
             )}
