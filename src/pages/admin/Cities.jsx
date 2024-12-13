@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import AddButton from '../../components/AddButton';
 
 export default function Cities() {
     const [cities, setCities] = useState([]);
@@ -18,7 +19,10 @@ export default function Cities() {
 
     return (
         <>
-            <h2>Städer</h2>
+            <div className='title-and-button'>
+                <h2>Städer</h2>
+                <AddButton text='Lägg till stad' />
+            </div>
             <div className='admin-cities'>
                 {cities.length > 0 && (
                     <>

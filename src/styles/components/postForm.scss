@@ -1,0 +1,86 @@
+.form-container {
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: rgba($color: #000000, $alpha: 0.9);
+    height: 100vh;
+    width: 100%;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .add-form {
+        background: $neutral-light-gray;
+        border-radius: 12px;
+        padding: 3rem;
+        box-shadow: 0 6px 15px $shadow;
+        width: 100%;
+        max-width: 420px;
+        border: 1px solid $primary-green;
+        position: relative;
+
+        .close-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 30px;
+            width: 30px;
+            margin-right: 10px;
+            margin-top: 10px;
+            background-color: $primary-green-light;
+            border: 1px solid $primary-green;
+            border-radius: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+
+            &:hover {
+                background-color: $primary-green;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 1.3rem;
+
+            label {
+                display: block;
+                font-size: 1rem;
+                color: $neutral-gray;
+                margin-bottom: 0.5rem;
+            }
+
+            input {
+                width: 100%;
+                padding: 1rem;
+                font-size: 1.1rem;
+                border: 1px solid $neutral-gray;
+                border-radius: 6px;
+                transition: border-color 0.3s ease;
+
+                &:focus {
+                    outline: none;
+                    border-color: $primary-green;
+                }
+            }
+        }
+
+        .add-form-button {
+            width: 100%;
+            padding: 0.8rem;
+            font-size: 1.1rem;
+            color: white;
+            background-color: $primary-green;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+
+            &:hover {
+                background-color: $primary-green-dark;
+            }
+        }
+    }
+}

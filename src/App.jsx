@@ -18,6 +18,8 @@ import History from './pages/customer/History';
 import Payments from './pages/customer/Payments';
 import Scooter from './pages/admin/Scooter';
 import Parking from './pages/admin/Parking';
+import Charging from './pages/admin/Charging';
+import { ShowFormContextProvider } from './contexts/ShowFormContext';
 
 export default function App() {
     const { role, loading } = useRole();
@@ -33,30 +35,33 @@ export default function App() {
     }
 
     return (
-        <Routes>
-            <Route path='/' element={<HomePage />} />
-            {role === 'admin' && (
-                <Route path='/admin' element={<AdminPage />}>
-                    <Route index element={<Overview />} />
-                    <Route path='cities' element={<Cities />} />
-                    <Route path='cities/:id' element={<City />} />
-                    <Route path='users' element={<Users />} />
-                    <Route path='users/:id' element={<User />} />
-                    <Route path='scooters' element={<Scooters />} />
-                    <Route path='scooters/:id' element={<Scooter />} />
-                    <Route path='parkings' element={<Parkings />} />
-                    <Route path='parkings/:id' element={<Parking />} />
-                    <Route path='chargings' element={<Chargings />} />
-                </Route>
-            )}
-            {role === 'customer' && (
-                <Route path='/customer' element={<CustomerPage />}>
-                    <Route index element={<Profile />} />
-                    <Route path='history' element={<History />} />
-                    <Route path='payments' element={<Payments />} />
-                </Route>
-            )}
-            <Route path='*' element={<Navigate to={role ? `/${role}` : '/'} replace />} />
-        </Routes>
+        <ShowFormContextProvider>
+            <Routes>
+                <Route path='/' element={<HomePage />} />
+                {role === 'admin' && (
+                    <Route path='/admin' element={<AdminPage />}>
+                        <Route index element={<Overview />} />
+                        <Route path='cities' element={<Cities />} />
+                        <Route path='cities/:id' element={<City />} />
+                        <Route path='users' element={<Users />} />
+                        <Route path='users/:id' element={<User />} />
+                        <Route path='scooters' element={<Scooters />} />
+                        <Route path='scooters/:id' element={<Scooter />} />
+                        <Route path='parkings' element={<Parkings />} />
+                        <Route path='parkings/:id' element={<Parking />} />
+                        <Route path='chargings' element={<Chargings />} />
+                        <Route path='chargings/:id' element={<Charging />} />
+                    </Route>
+                )}
+                {role === 'customer' && (
+                    <Route path='/customer' element={<CustomerPage />}>
+                        <Route index element={<Profile />} />
+                        <Route path='history' element={<History />} />
+                        <Route path='payments' element={<Payments />} />
+                    </Route>
+                )}
+                <Route path='*' element={<Navigate to={role ? `/${role}` : '/'} replace />} />
+            </Routes>
+        </ShowFormContextProvider>
     );
 }

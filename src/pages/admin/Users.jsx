@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import AddButton from '../../components/AddButton';
 
 export default function Users() {
     const [users, setUsers] = useState([]);
@@ -18,7 +19,10 @@ export default function Users() {
 
     return (
         <>
-            <h2>Användare</h2>
+            <div className='title-and-button'>
+                <h2>Användare</h2>
+                <AddButton text='Lägg till användare' />
+            </div>
             <div className='admin-users'>
                 {users.length > 0 && (
                     <>
