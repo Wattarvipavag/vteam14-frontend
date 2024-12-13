@@ -60,3 +60,11 @@ Then try running docker compose up, again.
 ```bash
 npm run dev
 ```
+
+## **Tests**
+
+#### **Run Tests with Vitest**
+
+```bash
+npm run test
+```
