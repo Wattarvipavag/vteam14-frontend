@@ -45,12 +45,12 @@ export default function App() {
                         <Route path='cities/:id' element={<City />} />
                         <Route path='users' element={<Users />} />
                         <Route path='users/:id' element={<User />} />
-                        <Route path='scooters' element={<Scooters />} />
-                        <Route path='scooters/:id' element={<Scooter />} />
-                        <Route path='parkings' element={<Parkings />} />
-                        <Route path='parkings/:id' element={<Parking />} />
-                        <Route path='chargings' element={<Chargings />} />
-                        <Route path='chargings/:id' element={<Charging />} />
+                        <Route path='bikes' element={<Scooters />} />
+                        <Route path='bikes/:id' element={<Scooter />} />
+                        <Route path='parkingareas' element={<Parkings />} />
+                        <Route path='parkingareas/:id' element={<Parking />} />
+                        <Route path='chargingstations' element={<Chargings />} />
+                        <Route path='chargingstations/:id' element={<Charging />} />
                     </Route>
                 )}
                 {role === 'customer' && (

@@ -20,7 +20,7 @@ export default function Charging() {
         <>
             <h2>{charging.name}</h2>
             <div className='admin-charging'>
-                <button onClick={() => navigate('/admin/chargings')}>
+                <button onClick={() => navigate('/admin/chargingstations')}>
                     <TbArrowBackUp />
                     Tillbaka Till Laddstationer
                 </button>

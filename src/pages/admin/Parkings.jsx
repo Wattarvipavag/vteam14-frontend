@@ -63,7 +63,7 @@ export default function Parkings() {
 
                             {filteredParkings.map((parking) => (
                                 <li className='parking-card' key={parking._id}>
-                                    <Link to={`/admin/parkings/${parking._id}`}>
+                                    <Link to={`/admin/parkingareas/${parking._id}`}>
                                         <p>{parking.name}</p>
                                         <p>{parking.bikes.length}</p>
                                         {/* Fetch and display the city name using the cityId */}

@@ -63,7 +63,7 @@ export default function Chargings() {
 
                             {filteredChargings.map((charging) => (
                                 <li className='charging-card' key={charging._id}>
-                                    <Link to={`/admin/chargings/${charging._id}`}>
+                                    <Link to={`/admin/chargingstations/${charging._id}`}>
                                         <p>{charging.name}</p>
                                         <p>{charging.bikes.length}</p>
                                         {/* Fetch and display the city name using the cityId */}

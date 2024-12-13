@@ -51,7 +51,7 @@ export default function Scooters() {
 
                             {filteredScooters.map((scooter) => (
                                 <li className='scooter-card' key={scooter._id}>
-                                    <Link to={`/admin/scooters/${scooter._id}`}>
+                                    <Link to={`/admin/bikes/${scooter._id}`}>
                                         <p>{scooter._id}</p>
                                         <p>{scooter.available ? 'Tillgänglig' : 'Utlånad'}</p>
                                         <p className={`battery ${getBatteryClass(scooter.charge)}`}>{scooter.charge}%</p>
