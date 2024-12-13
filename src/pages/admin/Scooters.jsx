@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import AddButton from '../../components/AddButton';
 
 export default function Scooters() {
     const [scooters, setScooters] = useState([]);
@@ -24,7 +25,10 @@ export default function Scooters() {
 
     return (
         <>
-            <h2>Elsparkcyklar</h2>
+            <div className='title-and-button'>
+                <h2>Elsparkcyklar</h2>
+                <AddButton text='Lägg till elsparkcykel' />
+            </div>
             <div className='admin-scooters'>
                 {scooters.length > 0 && (
                     <>
@@ -41,15 +45,19 @@ export default function Scooters() {
                                 <div>Status</div>
                                 <div>Batterinivå</div>
                                 <div>Hastighet</div>
+                                <div>På laddstation</div>
+                                <div>På parkeringsplats</div>
                             </li>
 
                             {filteredScooters.map((scooter) => (
                                 <li className='scooter-card' key={scooter._id}>
-                                    <Link to={`/admin/scooters/${scooter._id}`}>
+                                    <Link to={`/admin/bikes/${scooter._id}`}>
                                         <p>{scooter._id}</p>
                                         <p>{scooter.available ? 'Tillgänglig' : 'Utlånad'}</p>
                                         <p className={`battery ${getBatteryClass(scooter.charge)}`}>{scooter.charge}%</p>
                                         <p>{scooter.speed}</p>
+                                        <p>{scooter.chargingStationId ? 'Ja' : 'Nej'}</p>
+                                        <p>{scooter.parkingAreaId ? 'Ja' : 'Nej'}</p>
                                     </Link>
                                 </li>
                             ))}

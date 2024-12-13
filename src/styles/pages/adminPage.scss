@@ -13,4 +13,10 @@
     h2 {
         margin-bottom: 20px;
     }
+
+    .title-and-button {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
 }

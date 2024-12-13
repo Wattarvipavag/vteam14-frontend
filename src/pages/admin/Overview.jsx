@@ -11,17 +11,13 @@ export default function Overview() {
 
     useEffect(() => {
         const getCounters = async () => {
-            const citiesCountRes = await axios.get('http://localhost:8000/api/cities');
-            const usersCountRes = await axios.get('http://localhost:8000/api/users');
-            const scootersCountRes = await axios.get('http://localhost:8000/api/bikes');
-            const chargingsCountRes = await axios.get('http://localhost:8000/api/chargingstations');
-            const parkingsCountRes = await axios.get('http://localhost:8000/api/parkingareas');
+            const stats = await axios.get('http://localhost:8000/api/stats');
 
-            setCitiesCount(citiesCountRes.data.length);
-            setUsersCount(usersCountRes.data.length);
-            setScootersCount(scootersCountRes.data.length);
-            setParkingsCount(parkingsCountRes.data.length);
-            setChargingsCount(chargingsCountRes.data.length);
+            setCitiesCount(stats.data.cities);
+            setUsersCount(stats.data.users);
+            setScootersCount(stats.data.bikes);
+            setParkingsCount(stats.data.parkingAreas);
+            setChargingsCount(stats.data.chargingstations);
         };
 
         getCounters();

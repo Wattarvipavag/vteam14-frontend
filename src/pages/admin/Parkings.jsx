@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import AddButton from '../../components/AddButton';
 
 export default function Parkings() {
     const [parkings, setParkings] = useState([]);
@@ -40,7 +41,10 @@ export default function Parkings() {
 
     return (
         <>
-            <h2>Parkeringszoner</h2>
+            <div className='title-and-button'>
+                <h2>Parkeringszoner</h2>
+                <AddButton text='Lägg till parkeringszon' />
+            </div>
             <div className='admin-parkings'>
                 {parkings.length > 0 && (
                     <>
@@ -59,7 +63,7 @@ export default function Parkings() {
 
                             {filteredParkings.map((parking) => (
                                 <li className='parking-card' key={parking._id}>
-                                    <Link to={`/admin/parkings/${parking._id}`}>
+                                    <Link to={`/admin/parkingareas/${parking._id}`}>
                                         <p>{parking.name}</p>
                                         <p>{parking.bikes.length}</p>
                                         {/* Fetch and display the city name using the cityId */}

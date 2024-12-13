@@ -1,0 +1,62 @@
+.admin-chargings {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow: hidden;
+    position: relative;
+
+    input {
+        padding: 15px;
+        width: 100%;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+    }
+
+    input:focus {
+        outline: none;
+    }
+
+    ul {
+        overflow: auto;
+
+        .charging-header {
+            background-color: $primary-green-light;
+            display: flex;
+            padding: 20px 10px;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            border-bottom: 1px solid $neutral-light-gray;
+
+            div {
+                flex: 1;
+                font-weight: 600;
+            }
+
+            :not(:first-child) {
+                text-align: center;
+            }
+        }
+
+        .charging-card a {
+            display: flex;
+            padding: 20px 10px;
+            border-bottom: 1px solid $neutral-light-gray;
+            cursor: pointer;
+
+            p {
+                flex: 1;
+                color: $neutral-black;
+            }
+
+            :not(:first-child) {
+                text-align: center;
+            }
+
+            &:hover {
+                background-color: $neutral-light-gray;
+            }
+        }
+    }
+}

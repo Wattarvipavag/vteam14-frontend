@@ -48,19 +48,19 @@ function AdminNav() {
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink to='/admin/scooters'>
+                    <NavLink to='/admin/bikes'>
                         <TbScooter className='icon' />
                         Elsparkcyklar
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink to='/admin/parkings'>
+                    <NavLink to='/admin/parkingareas'>
                         <TbParking className='icon' />
                         Parkeringszoner
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink to='/admin/chargings'>
+                    <NavLink to='/admin/chargingstations'>
                         <TbChargingPile className='icon' />
                         Laddstationer
                     </NavLink>

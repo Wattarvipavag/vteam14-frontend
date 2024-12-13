@@ -20,7 +20,7 @@ export default function Scooter() {
         <>
             <h2>{scooter._id}</h2>
             <div className='admin-scooter'>
-                <button onClick={() => navigate('/admin/scooters')}>
+                <button onClick={() => navigate('/admin/bikes')}>
                     <TbArrowBackUp />
                     Tillbaka Till Elsparkcyklar
                 </button>

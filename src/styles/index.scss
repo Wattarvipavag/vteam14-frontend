@@ -7,6 +7,8 @@
 @import './components/loginForm.scss';
 @import './components/sideNav.scss';
 @import './components/spinner.scss';
+@import './components/addButton.scss';
+@import './components/postForm.scss';
 
 @import './pages/homePage.scss';
 @import './pages/adminPage.scss';
@@ -21,3 +23,5 @@
 @import './pages/admin/scooter.scss';
 @import './pages/admin/parkings.scss';
 @import './pages/admin/parking.scss';
+@import './pages/admin/chargings.scss';
+@import './pages/admin/charging.scss';

@@ -20,7 +20,7 @@ export default function Parking() {
         <>
             <h2>{parking.name}</h2>
             <div className='admin-parking'>
-                <button onClick={() => navigate('/admin/parkings')}>
+                <button onClick={() => navigate('/admin/parkingareas')}>
                     <TbArrowBackUp />
                     Tillbaka Till Parkeringszoner
                 </button>
