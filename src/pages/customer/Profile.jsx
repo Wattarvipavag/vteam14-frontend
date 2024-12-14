@@ -8,7 +8,7 @@ export default function Profile() {
     const [user, setUser] = useState();
     const [githubUser] = useAuthState(auth);
     const [email, setEmail] = useState('');
-    const [money, setMoney] = useState();
+    const [money, setMoney] = useState('');
 
     useEffect(() => {
         const getUser = async () => {
@@ -26,13 +26,13 @@ export default function Profile() {
     };
 
     const handleAddMoney = async () => {
+        if (!money) return;
         const balance = parseInt(user.balance) + parseInt(money);
         await axios.post(`http://localhost:8000/api/users/${user._id}`, {
             balance,
         });
-
         setUser((prevUser) => ({ ...prevUser, balance }));
-        setMoney();
+        setMoney('');
     };
 
     return (
