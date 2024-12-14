@@ -1,0 +1,38 @@
+.customer-header {
+    background-color: $primary-green-light;
+    display: flex;
+    padding: 20px 10px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    border-bottom: 1px solid $neutral-light-gray;
+
+    div {
+        flex: 1;
+        font-weight: 600;
+    }
+
+    :not(:first-child) {
+        text-align: center;
+    }
+}
+
+.customer-card {
+    display: flex;
+    padding: 20px 10px;
+    border-bottom: 1px solid $neutral-light-gray;
+    cursor: pointer;
+
+    p {
+        flex: 1;
+        color: $neutral-black;
+    }
+
+    :not(:first-child) {
+        text-align: center;
+    }
+
+    &:hover {
+        background-color: $neutral-light-gray;
+    }
+}
