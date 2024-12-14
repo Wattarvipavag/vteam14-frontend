@@ -15,7 +15,6 @@ import User from './pages/admin/User';
 import City from './pages/admin/City';
 import Profile from './pages/customer/Profile';
 import History from './pages/customer/History';
-import Payments from './pages/customer/Payments';
 import Scooter from './pages/admin/Scooter';
 import Parking from './pages/admin/Parking';
 import Charging from './pages/admin/Charging';
@@ -57,7 +56,6 @@ export default function App() {
                     <Route path='/customer' element={<CustomerPage />}>
                         <Route index element={<Profile />} />
                         <Route path='history' element={<History />} />
-                        <Route path='payments' element={<Payments />} />
                     </Route>
                 )}
                 <Route path='*' element={<Navigate to={role ? `/${role}` : '/'} replace />} />

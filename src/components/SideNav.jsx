@@ -1,15 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import {
-    TbLayoutDashboard,
-    TbMapPin,
-    TbUsers,
-    TbScooter,
-    TbParking,
-    TbChargingPile,
-    TbUser,
-    TbHistory,
-    TbCreditCard,
-} from 'react-icons/tb';
+import { TbLayoutDashboard, TbMapPin, TbUsers, TbScooter, TbParking, TbChargingPile, TbUser, TbHistory } from 'react-icons/tb';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../config/firebaseConfig';
 import { useRole } from '../contexts/RoleContext';
@@ -89,13 +79,7 @@ function CustomerNav() {
                 <li>
                     <NavLink to='/customer/history'>
                         <TbHistory className='icon' />
-                        Resehistorik
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink to='/customer/payments'>
-                        <TbCreditCard className='icon' />
-                        Betalningar
+                        Historik
                     </NavLink>
                 </li>
             </ul>
