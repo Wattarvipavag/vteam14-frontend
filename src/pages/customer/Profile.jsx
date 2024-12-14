@@ -8,7 +8,7 @@ export default function Profile() {
     const [user, setUser] = useState();
     const [githubUser] = useAuthState(auth);
     const [email, setEmail] = useState('');
-    const [money, setMoney] = useState(0);
+    const [money, setMoney] = useState();
 
     useEffect(() => {
         const getUser = async () => {
@@ -32,7 +32,7 @@ export default function Profile() {
         });
 
         setUser((prevUser) => ({ ...prevUser, balance }));
-        setMoney(0);
+        setMoney();
     };
 
     return (
