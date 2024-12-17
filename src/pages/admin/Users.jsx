@@ -21,7 +21,6 @@ export default function Users() {
         <>
             <div className='title-and-button'>
                 <h2>Användare</h2>
-                <AddButton text='Lägg till användare' />
             </div>
             <div className='admin-users'>
                 {users.length > 0 && (

@@ -16,7 +16,11 @@
 
     .title-and-button {
         display: flex;
-        align-items: center;
         justify-content: space-between;
+    }
+
+    .map {
+        height: 100%;
+        width: 100%;
     }
 }

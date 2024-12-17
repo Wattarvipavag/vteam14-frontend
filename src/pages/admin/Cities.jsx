@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import AddButton from '../../components/AddButton';
+import { useDataRefresh } from '../../contexts/DataRefreshContext';
 
 export default function Cities() {
     const [cities, setCities] = useState([]);
     const [search, setSearch] = useState('');
+    const { refresh } = useDataRefresh();
 
     const filteredCities = cities.filter((city) => city.name.toLowerCase().includes(search.toLowerCase()));
 
@@ -15,7 +17,7 @@ export default function Cities() {
             setCities(res.data);
         }
         getCities();
-    }, []);
+    }, [refresh]);
 
     return (
         <>

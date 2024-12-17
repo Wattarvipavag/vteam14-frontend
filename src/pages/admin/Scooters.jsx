@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import AddButton from '../../components/AddButton';
+import { useDataRefresh } from '../../contexts/DataRefreshContext';
 
 export default function Scooters() {
     const [scooters, setScooters] = useState([]);
     const [search, setSearch] = useState('');
+    const { refresh } = useDataRefresh();
 
     const filteredScooters = scooters.filter((scooter) => scooter._id.toLowerCase().includes(search.toLowerCase()));
 
@@ -15,7 +17,7 @@ export default function Scooters() {
             setScooters(res.data);
         }
         getScooters();
-    }, []);
+    }, [refresh]);
 
     const getBatteryClass = (charge) => {
         if (charge > 70) return 'green';
