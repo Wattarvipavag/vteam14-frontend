@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import AddButton from '../../components/AddButton';
+import { useDataRefresh } from '../../contexts/DataRefreshContext';
 
 export default function Parkings() {
     const [parkings, setParkings] = useState([]);
     const [search, setSearch] = useState('');
     const [cityNames, setCityNames] = useState({}); // Object to store city names keyed by cityId
+    const { refresh } = useDataRefresh();
 
     const filteredParkings = parkings.filter((parking) => parking.name.toLowerCase().includes(search.toLowerCase()));
 
@@ -37,7 +39,7 @@ export default function Parkings() {
         }
 
         fetchParkingsAndCities();
-    }, []); // Empty dependency array to run only once when the component mounts
+    }, [refresh]); // Empty dependency array to run only once when the component mounts
 
     return (
         <>

@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import AddButton from '../../components/AddButton';
+import { useDataRefresh } from '../../contexts/DataRefreshContext';
 
 export default function Chargings() {
     const [chargings, setChargings] = useState([]);
     const [search, setSearch] = useState('');
     const [cityNames, setCityNames] = useState({}); // Object to store city names keyed by cityId
+    const { refresh } = useDataRefresh();
 
     const filteredChargings = chargings.filter((charging) => charging.name.toLowerCase().includes(search.toLowerCase()));
 
@@ -37,7 +39,7 @@ export default function Chargings() {
         }
 
         fetchChargingsAndCities();
-    }, []);
+    }, [refresh]);
 
     return (
         <>

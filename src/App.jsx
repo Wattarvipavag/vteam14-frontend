@@ -19,6 +19,7 @@ import Scooter from './pages/admin/Scooter';
 import Parking from './pages/admin/Parking';
 import Charging from './pages/admin/Charging';
 import { ShowFormContextProvider } from './contexts/ShowFormContext';
+import { DataRefreshProvider } from './contexts/DataRefreshContext';
 
 export default function App() {
     const { role, loading } = useRole();
@@ -35,31 +36,33 @@ export default function App() {
 
     return (
         <ShowFormContextProvider>
-            <Routes>
-                <Route path='/' element={<HomePage />} />
-                {role === 'admin' && (
-                    <Route path='/admin' element={<AdminPage />}>
-                        <Route index element={<Overview />} />
-                        <Route path='cities' element={<Cities />} />
-                        <Route path='cities/:id' element={<City />} />
-                        <Route path='users' element={<Users />} />
-                        <Route path='users/:id' element={<User />} />
-                        <Route path='bikes' element={<Scooters />} />
-                        <Route path='bikes/:id' element={<Scooter />} />
-                        <Route path='parkingareas' element={<Parkings />} />
-                        <Route path='parkingareas/:id' element={<Parking />} />
-                        <Route path='chargingstations' element={<Chargings />} />
-                        <Route path='chargingstations/:id' element={<Charging />} />
-                    </Route>
-                )}
-                {role === 'customer' && (
-                    <Route path='/customer' element={<CustomerPage />}>
-                        <Route index element={<Profile />} />
-                        <Route path='history' element={<History />} />
-                    </Route>
-                )}
-                <Route path='*' element={<Navigate to={role ? `/${role}` : '/'} replace />} />
-            </Routes>
+            <DataRefreshProvider>
+                <Routes>
+                    <Route path='/' element={<HomePage />} />
+                    {role === 'admin' && (
+                        <Route path='/admin' element={<AdminPage />}>
+                            <Route index element={<Overview />} />
+                            <Route path='cities' element={<Cities />} />
+                            <Route path='cities/:id' element={<City />} />
+                            <Route path='users' element={<Users />} />
+                            <Route path='users/:id' element={<User />} />
+                            <Route path='bikes' element={<Scooters />} />
+                            <Route path='bikes/:id' element={<Scooter />} />
+                            <Route path='parkingareas' element={<Parkings />} />
+                            <Route path='parkingareas/:id' element={<Parking />} />
+                            <Route path='chargingstations' element={<Chargings />} />
+                            <Route path='chargingstations/:id' element={<Charging />} />
+                        </Route>
+                    )}
+                    {role === 'customer' && (
+                        <Route path='/customer' element={<CustomerPage />}>
+                            <Route index element={<Profile />} />
+                            <Route path='history' element={<History />} />
+                        </Route>
+                    )}
+                    <Route path='*' element={<Navigate to={role ? `/${role}` : '/'} replace />} />
+                </Routes>
+            </DataRefreshProvider>
         </ShowFormContextProvider>
     );
 }
