@@ -20,9 +20,10 @@ export default function Scooters() {
     }, [refresh]);
 
     const getBatteryClass = (charge) => {
-        if (charge > 70) return 'green';
-        if (charge > 50) return 'yellow';
-        return 'red';
+        if (charge >= 70) return 'green';
+        if (charge >= 50) return '#FDCE06';
+        if (charge >= 30) return '#EB841F';
+        return '#D61E2A';
     };
 
     return (
@@ -56,7 +57,7 @@ export default function Scooters() {
                                     <Link to={`/admin/bikes/${scooter._id}`}>
                                         <p>{scooter._id}</p>
                                         <p>{scooter.available ? 'Tillgänglig' : 'Utlånad'}</p>
-                                        <p className={`battery ${getBatteryClass(scooter.charge)}`}>{scooter.charge}%</p>
+                                        <p style={{ color: getBatteryClass(scooter.charge) }}>{scooter.charge}%</p>
                                         <p>{scooter.speed}</p>
                                         <p>{scooter.chargingStationId ? 'Ja' : 'Nej'}</p>
                                         <p>{scooter.parkingAreaId ? 'Ja' : 'Nej'}</p>

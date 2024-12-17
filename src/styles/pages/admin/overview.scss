@@ -1,10 +1,10 @@
 .admin-overview {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); // Flexible grid setup
     gap: 20px;
 
     .card {
-        width: 300px;
+        width: 100%;
         border-radius: 10px;
         padding: 20px;
         box-shadow: 0 4px 6px $shadow;
@@ -12,15 +12,24 @@
         .card-header {
             display: flex;
             align-items: center;
-            gap: 15px;
             margin-bottom: 15px;
+            position: relative;
 
             div {
                 font-size: 2rem;
                 color: $primary-green;
+
+                svg {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    transform: translateY(-25%);
+                }
             }
 
             h3 {
+                flex: 1;
+                text-align: center;
                 font-size: 1.25rem;
                 font-weight: 700;
                 color: $neutral-black;
