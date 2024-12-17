@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { TbMapPin, TbUsers, TbScooter, TbParking, TbChargingPile } from 'react-icons/tb';
+import Map from '../../components/Map';
 
 export default function Overview() {
     const [citiesCount, setCitiesCount] = useState(null);
@@ -27,12 +28,13 @@ export default function Overview() {
         <>
             <h2>Översikt</h2>
             <div className='admin-overview'>
-                <Card title='Städer' value={citiesCount} icon={<TbMapPin />} backgroundColor='#d6f7e8' />
-                <Card title='Användare' value={usersCount} icon={<TbUsers />} backgroundColor='#b3d9ff' />
-                <Card title='Elsparkcyklar' value={scootersCount} icon={<TbScooter />} backgroundColor='#fff7d6' />
-                <Card title='Parkeringszoner' value={parkingsCount} icon={<TbParking />} backgroundColor='#f0e6a3' />
-                <Card title='Laddstationer' value={chargingsCount} icon={<TbChargingPile />} backgroundColor='#ffcccb' />
+                <Card title='Städer' value={citiesCount} icon={<TbMapPin size={40} />} backgroundColor='#d6f7e8' />
+                <Card title='Användare' value={usersCount} icon={<TbUsers size={40} />} backgroundColor='#b3d9ff' />
+                <Card title='Elsparkcyklar' value={scootersCount} icon={<TbScooter size={40} />} backgroundColor='#fff7d6' />
+                <Card title='Parkeringszoner' value={parkingsCount} icon={<TbParking size={40} />} backgroundColor='#f0e6a3' />
+                <Card title='Laddstationer' value={chargingsCount} icon={<TbChargingPile size={40} />} backgroundColor='#ffcccb' />
             </div>
+            <Map location={{ latitude: '59.341195', longitude: '18.041041' }} zoom={6} overview={true} />
         </>
     );
 }

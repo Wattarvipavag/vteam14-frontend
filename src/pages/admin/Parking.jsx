@@ -40,7 +40,7 @@ export default function Parking() {
                 </div>
                 <div className='map-and-info'>
                     <div className='map-container'>
-                        <Map location={parking.location} />
+                        <Map location={parking.location} zoom={15} overview={false} />
                     </div>
                     <div className='info-container'>
                         <h3>Information</h3>

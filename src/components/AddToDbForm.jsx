@@ -32,7 +32,7 @@ export default function AddToDbForm() {
     useEffect(() => {
         setParkingAreasName([]);
         setParkingAreasId([]);
-        if (selectedCity) {
+        if (selectedCity && route === 'bikes') {
             const getParkingAreas = async () => {
                 const res = await axios.get(`http://localhost:8000/api/cities//cityid/${selectedCity}`);
                 const parkingAreasInCity = res.data.city.parkingAreas;
@@ -103,11 +103,15 @@ export default function AddToDbForm() {
             const dataToSubmit = {};
 
             for (const [key, value] of formData) {
-                if (value.trim === '' && route === 'cities') {
+                if (
+                    (value === '' && route === 'cities') ||
+                    (value === '' && route === 'chargingstations') ||
+                    (value === '' && route === 'parkingareas')
+                ) {
                     throw new Error();
                 }
 
-                if (value.trim === '' && !selectedCity) {
+                if (value === '' && !selectedCity) {
                     throw new Error();
                 }
             }
