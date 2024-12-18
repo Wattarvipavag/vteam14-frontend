@@ -12,7 +12,6 @@ import Scooters from './pages/admin/Scooters';
 import Parkings from './pages/admin/Parkings';
 import Chargings from './pages/admin/Chargings';
 import User from './pages/admin/User';
-import City from './pages/admin/City';
 import Profile from './pages/customer/Profile';
 import History from './pages/customer/History';
 import Scooter from './pages/admin/Scooter';
@@ -43,7 +42,6 @@ export default function App() {
                         <Route path='/admin' element={<AdminPage />}>
                             <Route index element={<Overview />} />
                             <Route path='cities' element={<Cities />} />
-                            <Route path='cities/:id' element={<City />} />
                             <Route path='users' element={<Users />} />
                             <Route path='users/:id' element={<User />} />
                             <Route path='bikes' element={<Scooters />} />

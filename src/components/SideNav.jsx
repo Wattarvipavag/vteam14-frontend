@@ -3,11 +3,19 @@ import { TbLayoutDashboard, TbMapPin, TbUsers, TbScooter, TbParking, TbChargingP
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../config/firebaseConfig';
 import { useRole } from '../contexts/RoleContext';
+import axios from 'axios';
 
 export default function SideNav() {
     const { role } = useRole();
     return role === 'admin' ? <AdminNav /> : <CustomerNav />;
 }
+
+const handleDeleteAll = async () => {
+    await axios.delete('http://localhost:8000/api/bikes');
+    await axios.delete('http://localhost:8000/api/chargingstations');
+    await axios.delete('http://localhost:8000/api/parkingareas');
+    await axios.delete('http://localhost:8000/api/cities');
+};
 
 function AdminNav() {
     const [user] = useAuthState(auth);
@@ -56,6 +64,7 @@ function AdminNav() {
                     </NavLink>
                 </li>
             </ul>
+            <button onClick={handleDeleteAll}>Ta bort ALLT</button>
         </div>
     );
 }

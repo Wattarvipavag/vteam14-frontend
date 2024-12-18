@@ -22,4 +22,55 @@
         outline: none;
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     }
+
+    .divider {
+        width: 100%;
+        height: 1px;
+        background-color: black;
+        margin-top: 1rem;
+    }
+    .scooter-update {
+        margin-top: 2rem;
+        input,
+        option,
+        select {
+            width: 100%;
+            padding: 0.8rem;
+            font-size: 1rem;
+            border: 1px solid $neutral-gray;
+            border-radius: 6px;
+            transition: border-color 0.3s ease;
+
+            &:focus {
+                outline: none;
+                border-color: $primary-green;
+            }
+        }
+
+        .add-form-button {
+            width: 100%;
+            padding: 0.8rem;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            color: white;
+            background-color: $primary-green;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+
+            &:hover {
+                background-color: $primary-green-dark;
+            }
+        }
+    }
+    .error-message {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+        color: #d32f2f;
+        background-color: #fdecea;
+        border: 1px solid #f44336;
+        border-radius: 6px;
+        text-align: center;
+    }
 }

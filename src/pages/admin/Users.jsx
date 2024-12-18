@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import AddButton from '../../components/AddButton';
 
 export default function Users() {
     const [users, setUsers] = useState([]);
@@ -36,6 +35,8 @@ export default function Users() {
                                 <div>Namn</div>
                                 <div>Email</div>
                                 <div>Roll</div>
+                                <div>Saldo</div>
+                                <div>Historik</div>
                             </li>
 
                             {filteredUsers.map((user) => (
@@ -44,6 +45,8 @@ export default function Users() {
                                         <p>{user.name}</p>
                                         <p>{user.email}</p>
                                         <p>{user.role === 'admin' ? 'Administratör' : 'Användare'}</p>
+                                        <p>{user.balance}kr</p>
+                                        <p>{user.rentalHistory.length} resor</p>
                                     </Link>
                                 </li>
                             ))}

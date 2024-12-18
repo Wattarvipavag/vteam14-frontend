@@ -40,7 +40,7 @@ export default function Charging() {
                 </div>
                 <div className='map-and-info'>
                     <div className='map-container'>
-                        <Map location={charging.location} zoom={15} overview={false} />
+                        <Map location={charging.location} zoom={15} minZoom={12} maxZoom={20} overview={false} />
                     </div>
                     <div className='info-container'>
                         <h3>Information</h3>

@@ -8,6 +8,7 @@
     gap: 20px;
     padding-bottom: 10px;
     box-shadow: 0 4px 6px $shadow;
+    position: relative;
 
     .sidenav-header {
         margin-bottom: 20px;
@@ -64,5 +65,22 @@
         font-size: 1.4rem;
         margin-right: 12px;
         color: $primary-green;
+    }
+
+    button {
+        position: absolute;
+        bottom: 0;
+        margin: 20px;
+        margin-left: 0;
+        padding: 0.5rem 1rem;
+        color: white;
+        background-color: #d71828;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #a92934;
+        }
     }
 }
