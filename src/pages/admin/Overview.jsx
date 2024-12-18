@@ -34,7 +34,7 @@ export default function Overview() {
                 <Card title='Parkeringszoner' value={parkingsCount} icon={<TbParking size={40} />} backgroundColor='#f0e6a3' />
                 <Card title='Laddstationer' value={chargingsCount} icon={<TbChargingPile size={40} />} backgroundColor='#ffcccb' />
             </div>
-            <Map location={{ latitude: '59.341195', longitude: '18.041041' }} zoom={6} overview={true} />
+            <Map location={{ latitude: '59.341195', longitude: '18.041041' }} zoom={5} overview={true} />
         </>
     );
 }

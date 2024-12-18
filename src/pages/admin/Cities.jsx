@@ -35,16 +35,20 @@ export default function Cities() {
                                 <div>Antal Elsparkcyklar</div>
                                 <div>Antal Parkeringszoner</div>
                                 <div>Antal Laddstationer</div>
+                                <div>Pris/min</div>
+                                <div>Tilläggsavgift %</div>
+                                <div>Rabatt %</div>
                             </li>
 
                             {filteredCities.map((city) => (
                                 <li className='city-card' key={city._id}>
-                                    <Link to={`/admin/cities/${city._id}`}>
-                                        <p>{city.name}</p>
-                                        <p>{city.bikes.length}</p>
-                                        <p>{city.parkingAreas.length}</p>
-                                        <p>{city.chargingStations.length}</p>
-                                    </Link>
+                                    <p>{city.name}</p>
+                                    <p>{city.bikes.length}</p>
+                                    <p>{city.parkingAreas.length}</p>
+                                    <p>{city.chargingStations.length}</p>
+                                    <p>{city.minuteRate}kr</p>
+                                    <p>{city.surcharge}%</p>
+                                    <p>{city.discount}%</p>
                                 </li>
                             ))}
                         </ul>

@@ -22,4 +22,16 @@
         outline: none;
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     }
+
+    .delete-btn {
+        color: white;
+        margin-top: 2rem;
+        margin-bottom: 0;
+        background-color: #d71828;
+        border: none;
+
+        &:hover {
+            background-color: #a92934;
+        }
+    }
 }

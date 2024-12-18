@@ -54,9 +54,11 @@ export default function AddToDbForm() {
             cities: [
                 { title: 'Lägg till stad' },
                 { name: 'name', type: 'text', label: 'Namn', placeholder: 'Ange stadens namn' },
-                { name: 'hourlyRate', type: 'number', label: 'Pris/h', placeholder: 'Ange timpris' },
-                { name: 'surcharge', type: 'number', label: 'Tillägg', placeholder: 'Ange eventuellt tillägg' },
+                { name: 'minuteRate', type: 'number', label: 'Pris/min', placeholder: 'Ange minutpris' },
+                { name: 'surcharge', type: 'number', label: 'Tilläggsavgift', placeholder: 'Ange eventuellt tilläggsavgift' },
                 { name: 'discount', type: 'number', label: 'Rabatt', placeholder: 'Ange eventuell rabatt' },
+                { name: 'latitude', type: 'text', label: 'Latitud ex. 55.66', placeholder: 'Ange latitud' },
+                { name: 'longitude', type: 'text', label: 'Longitud ex. 55.66', placeholder: 'Ange longitud' },
             ],
             bikes: [
                 { title: 'Lägg till elsparkcykel' },

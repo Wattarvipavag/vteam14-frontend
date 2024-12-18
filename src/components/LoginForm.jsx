@@ -15,7 +15,7 @@ export default function LoginForm() {
             const res = await signInWithGithub();
 
             const oauthId = res.user.uid;
-            const name = res.user.displayName;
+            const name = res.user.displayName ? res.user.displayName : 'Namnlös?';
             const email = res.user.email ? res.user.email : 'Finns ej';
             const profileImage = res.user.photoURL;
 
