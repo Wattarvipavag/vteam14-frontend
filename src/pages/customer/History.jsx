@@ -12,7 +12,6 @@ export default function History({ userId }) {
         const getUser = async () => {
             const res = await axios.get(`http://localhost:8000/api/users/oauth/${githubUser.uid}`);
             setUser(res.data.user);
-            console.log(res.data.user);
         };
         getUser();
     }, []);
@@ -20,10 +19,8 @@ export default function History({ userId }) {
     useEffect(() => {
         if (user) {
             const getHistory = async () => {
-                /* const res = await axios.get(`http://localhosten:8000/api/rentals/userrentals/${user.id}`);
-                setHistory(res.data.rentals); */
-
-                console.log(123);
+                const res = await axios.get(`http://localhost:8000/api/rentals/userrentals/${user._id}`);
+                setHistory(res.data.rentals);
             };
             getHistory();
         }
@@ -38,42 +35,18 @@ export default function History({ userId }) {
                         <div>Resa(ID)</div>
                         <div>Starttid</div>
                         <div>Sluttid</div>
-                        <div>Totaltid</div>
                         <div>Totalkostnad</div>
                         <div>Status</div>
                     </li>
-                    <li className='customer-card'>
-                        <p>123123123</p>
-                        {/*  <p>{rental.createdAt}</p>
-                        <p>{rental.updatedAt}</p> */}
-                        <p>22 min</p>
-                        <p>100kr</p>
-                        <p>Aktiv/Avslutad</p>
-                    </li>
-                    <li className='customer-card'>
-                        <p>123123123</p>
-                        <p>23/4-24 07:27</p>
-                        <p>23/4-24 07:59</p>
-                        <p>22 min</p>
-                        <p>100kr</p>
-                        <p>Aktiv/Avslutad</p>
-                    </li>
-                    <li className='customer-card'>
-                        <p>123123123</p>
-                        <p>23/4-24 07:27</p>
-                        <p>23/4-24 07:59</p>
-                        <p>22 min</p>
-                        <p>100kr</p>
-                        <p>Aktiv/Avslutad</p>
-                    </li>
-                    <li className='customer-card'>
-                        <p>123123123</p>
-                        <p>23/4-24 07:27</p>
-                        <p>23/4-24 07:59</p>
-                        <p>22 min</p>
-                        <p>100kr</p>
-                        <p>Aktiv/Avslutad</p>
-                    </li>
+                    {history.map((rental) => (
+                        <li className='customer-card' key={rental._id}>
+                            <p>{rental._id}</p>
+                            <p>{new Date(rental.createdAt).toLocaleString()}</p>
+                            <p>{new Date(rental.updatedAt).toLocaleString()}</p>
+                            <p>{rental.totalCost}kr</p>
+                            <p>{rental.status ? 'Aktiv' : 'Avslutad'}</p>
+                        </li>
+                    ))}
                 </ul>
             </div>
         </>

@@ -17,11 +17,15 @@
     }
 }
 
+.customer-history {
+    overflow-y: auto;
+    height: 100%;
+}
+
 .customer-card {
     display: flex;
     padding: 20px 10px;
     border-bottom: 1px solid $neutral-light-gray;
-    cursor: pointer;
 
     p {
         flex: 1;

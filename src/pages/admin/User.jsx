@@ -5,6 +5,7 @@ import axios from 'axios';
 
 export default function User() {
     const [user, setUser] = useState(null);
+    const [rentals, setRentals] = useState(null);
     let { id } = useParams();
     const navigate = useNavigate();
 
@@ -19,6 +20,20 @@ export default function User() {
         }
         getUser();
     }, []);
+
+    useEffect(() => {
+        if (user) {
+            const getRentals = async () => {
+                try {
+                    const res = await axios.get(`http://localhost:8000/api/rentals/userrentals/${user._id}`);
+                    setRentals(res.data.rentals);
+                } catch (error) {
+                    console.error(error);
+                }
+            };
+            getRentals();
+        }
+    }, [user]);
 
     const handleDelete = async () => {
         await axios.delete(`http://localhost:8000/api/users/${id}`);
@@ -46,9 +61,30 @@ export default function User() {
                     <p>
                         <strong>Saldo:</strong> {user.balance}kr
                     </p>
-                    <p>
-                        <strong>Historik:</strong> {user.rentalHistory?.length} resor
-                    </p>
+                    <h3>Historik</h3>
+                    <div className='rental-history'>
+                        {rentals &&
+                            rentals.map((rental) => (
+                                <div key={rental._id} className='rental-item'>
+                                    <p>
+                                        <strong>Id:</strong> {rental._id}
+                                    </p>
+                                    <p>
+                                        <strong>Aktiv:</strong> {rental.active ? 'Ja' : 'Nej'}
+                                    </p>
+                                    <p>
+                                        <strong>Kostnad:</strong> {rental.totalCost} kr
+                                    </p>
+                                    <p>
+                                        <strong>Starttid:</strong> {new Date(rental.createdAt).toLocaleString()}
+                                    </p>
+                                    <p>
+                                        <strong>Sluttid:</strong> {new Date(rental.updatedAt).toLocaleString()}
+                                    </p>
+                                </div>
+                            ))}
+                    </div>
+
                     {user.role !== 'admin' && (
                         <button className='delete-btn' onClick={handleDelete}>
                             Ta bort användare
