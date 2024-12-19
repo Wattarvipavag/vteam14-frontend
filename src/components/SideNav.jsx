@@ -17,6 +17,11 @@ const handleDeleteAll = async () => {
     await axios.delete('http://localhost:8000/api/cities');
 };
 
+const handleDeleteAndReset = async () => {
+    await axios.delete('http://localhost:8000/api/reset');
+    await axios.post('http://localhost:8000/api/reset');
+};
+
 function AdminNav() {
     const [user] = useAuthState(auth);
 
@@ -65,6 +70,9 @@ function AdminNav() {
                 </li>
             </ul>
             <button onClick={handleDeleteAll}>Ta bort ALLT</button>
+            <button onClick={handleDeleteAndReset} className='reset-button'>
+                Ta bort och bygg upp
+            </button>
         </div>
     );
 }
