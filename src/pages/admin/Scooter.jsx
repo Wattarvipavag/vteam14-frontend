@@ -278,6 +278,7 @@ export default function Scooter() {
                             </>
                         )}
                         {error && <p className='error-message'>{error}</p>}
+                        {scooter && <img src={scooter.qrCode} alt='QR Code' />}
                     </div>
                 </div>
             </div>
