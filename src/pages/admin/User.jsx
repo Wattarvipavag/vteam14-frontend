@@ -48,7 +48,10 @@ export default function User() {
                         <TbArrowBackUp size={20} />
                         Tillbaka Till Användare
                     </button>
-                    <h2>{user.name}</h2>
+                    <div className='name-and-image-container'>
+                        <h2>{user.name}</h2>
+                        <img src={user.profileImage} alt='profile-picture' />
+                    </div>
                 </div>
                 <div className='info-container'>
                     <h3>Information</h3>
