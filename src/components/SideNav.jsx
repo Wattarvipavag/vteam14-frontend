@@ -22,6 +22,14 @@ const handleDeleteAndReset = async () => {
     await axios.post('http://localhost:8000/api/reset');
 };
 
+const handleStartSim = async () => {
+    await axios.get('http://localhost:8000/api/simulation/start');
+};
+
+const handleStopSim = async () => {
+    await axios.get('http://localhost:8000/api/simulation/stop');
+};
+
 function AdminNav() {
     const [user] = useAuthState(auth);
 
@@ -69,6 +77,12 @@ function AdminNav() {
                     </NavLink>
                 </li>
             </ul>
+            <button onClick={handleStartSim} className='start-button'>
+                Starta simulering
+            </button>
+            <button onClick={handleStopSim} className='stop-button'>
+                Stoppa simulering
+            </button>
             <button onClick={handleDeleteAll}>Ta bort ALLT</button>
             <button onClick={handleDeleteAndReset} className='reset-button'>
                 Ta bort och bygg upp

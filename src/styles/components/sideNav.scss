@@ -83,6 +83,14 @@
             bottom: 0;
         }
 
+        &.start-button {
+            bottom: 120px;
+        }
+
+        &.stop-button {
+            bottom: 80px;
+        }
+
         &:hover {
             background-color: #a92934;
         }
