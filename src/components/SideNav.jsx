@@ -11,10 +11,7 @@ export default function SideNav() {
 }
 
 const handleDeleteAll = async () => {
-    await axios.delete('http://localhost:8000/api/bikes');
-    await axios.delete('http://localhost:8000/api/chargingstations');
-    await axios.delete('http://localhost:8000/api/parkingareas');
-    await axios.delete('http://localhost:8000/api/cities');
+    await axios.delete('http://localhost:8000/api/reset');
 };
 
 const handleDeleteAndReset = async () => {
