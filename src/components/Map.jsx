@@ -5,14 +5,17 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import axios from 'axios';
 import { TbScooter, TbParking, TbChargingPile } from 'react-icons/tb';
 import logo from '../images/logo.png';
+import { useStartSim } from '../contexts/DataRefreshContext';
 
 export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
     const mapRef = useRef();
     const mapContainerRef = useRef();
     const [markersVisible, setMarkersVisible] = useState(false);
     const markersRef = useRef([]);
+    const bikesRef = useRef([]);
     const citiesRef = useRef([]);
     const [cities, setCities] = useState([]);
+    const { startSim } = useStartSim();
 
     const long = parseFloat(location.longitude);
     const lat = parseFloat(location.latitude);
@@ -131,7 +134,8 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
                                 .setLngLat([bike.location.longitude, bike.location.latitude])
                                 .addTo(mapRef.current)
                                 .setPopup(popup);
-                            markersRef.current.push(marker);
+                            marker.getElement().dataset.bikeId = bike._id;
+                            bikesRef.current.push(marker);
                         }
                         if (bike.parkingAreaId && parkingCounter[bike.parkingAreaId] <= 4) {
                             let offset = parkingCounter[bike.parkingAreaId];
@@ -153,7 +157,8 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
                                 .setLngLat([bike.location.longitude, bike.location.latitude])
                                 .addTo(mapRef.current)
                                 .setPopup(popup);
-                            markersRef.current.push(marker);
+                            marker.getElement().dataset.bikeId = bike._id;
+                            bikesRef.current.push(marker);
 
                             parkingCounter[bike.parkingAreaId] += 1;
                         }
@@ -177,7 +182,8 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
                                 .setLngLat([bike.location.longitude, bike.location.latitude])
                                 .addTo(mapRef.current)
                                 .setPopup(popup);
-                            markersRef.current.push(marker);
+                            marker.getElement().dataset.bikeId = bike._id;
+                            bikesRef.current.push(marker);
                         }
                     });
                 };
@@ -306,16 +312,62 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
             });
         }
 
-        if (!markersVisible && markersRef.current.length > 0) {
+        if (!markersVisible && markersRef.current.length > 0 && bikesRef.current.length > 0) {
             markersRef.current.forEach((marker) => marker.remove());
+            bikesRef.current.forEach((marker) => marker.remove());
             markersRef.current = [];
         }
 
-        if (markersVisible && citiesRef.current.length > 0) {
+        if (markersVisible && citiesRef.current.length > 0 && bikesRef.current.length > 0) {
             citiesRef.current.forEach((marker) => marker.remove());
+            bikesRef.current.forEach((marker) => marker.remove());
             citiesRef.current = [];
         }
     }, [location, markersVisible]);
+
+    useEffect(() => {
+        if (startSim) {
+            const interval = setInterval(async () => {
+                if (markersVisible) {
+                    const res = await axios.get('http://localhost:8000/api/simulation/update');
+
+                    //Bikes object, keys = bikeIds
+                    const bikes = res.data.data;
+                    const bikeIds = Object.keys(bikes);
+                    bikeIds.forEach((bikeId) => {
+                        const longitude = bikes[bikeId].location.longitude;
+                        const latitude = bikes[bikeId].location.latitude;
+                        const charge = bikes[bikeId].charge;
+                        const available = bikes[bikeId].available;
+                        const chargeColor = charge >= 70 ? 'green' : charge >= 50 ? '#FDCE06' : charge >= 30 ? '#EB841F' : '#D61E2A';
+
+                        bikesRef.current.some((bike) => {
+                            if (bikeId === bike._element.dataset.bikeId) {
+                                const element = bike.getElement();
+                                element.childNodes[0].style.backgroundColor = chargeColor;
+
+                                const popup = bike.getPopup();
+
+                                popup.setHTML(
+                                    `<div>
+                                    <h3>${bikeId}</h3>
+                                    <div class="popup-body">
+                                        <p><strong>Postion:</strong> ${latitude}, ${longitude}</p>
+                                        <p><strong>Laddning:</strong> ${charge}%</p>
+                                        <p><strong>Tillgänglig:</strong> ${available ? 'Ja' : 'Nej'}</p>
+                                    </div>
+                                </div>`
+                                );
+
+                                bike.setLngLat([longitude, latitude]);
+                            }
+                        });
+                    });
+                }
+            }, 1000);
+            return () => clearInterval(interval);
+        }
+    }, [markersVisible, startSim]);
 
     function createGeoJSONCircle(center, radius, numPoints = 64) {
         const toRad = (degree) => (degree * Math.PI) / 180;
