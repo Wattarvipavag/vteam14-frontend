@@ -22,6 +22,7 @@ function AdminNav() {
 
     const handleDeleteAndReset = async () => {
         await axios.delete('http://localhost:8000/api/reset');
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         await axios.post('http://localhost:8000/api/reset');
     };
 
