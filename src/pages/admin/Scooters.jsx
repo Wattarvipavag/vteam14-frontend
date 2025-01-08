@@ -56,7 +56,7 @@ export default function Scooters() {
                                 <li className='scooter-card' key={scooter._id}>
                                     <Link to={`/admin/bikes/${scooter._id}`}>
                                         <p>{scooter._id}</p>
-                                        <p>{scooter.available ? 'Tillgänglig' : 'Utlånad'}</p>
+                                        <p>{scooter.available ? 'Tillgänglig' : 'Ej tillgänglig'}</p>
                                         <p style={{ color: getBatteryClass(scooter.charge) }}>{scooter.charge}%</p>
                                         <p>{scooter.speed}</p>
                                         <p>{scooter.chargingStationId ? 'Ja' : 'Nej'}</p>
