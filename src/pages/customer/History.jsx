@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../config/firebaseConfig';
 
-export default function History({ userId }) {
+export default function History() {
     const [history, setHistory] = useState([]);
     const [githubUser] = useAuthState(auth);
     const [user, setUser] = useState(null);

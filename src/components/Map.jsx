@@ -20,11 +20,7 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
     const long = parseFloat(location.longitude);
     const lat = parseFloat(location.latitude);
 
-    const isTestEnvironment = process.env.NODE_ENV === 'test';
-
-    if (isTestEnvironment) {
-        return;
-    }
+    const isTestEnvironment = import.meta.env.NODE_ENV === 'test';
 
     useEffect(() => {
         const getCities = async () => {
@@ -93,119 +89,6 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
                     parkingAreas.data.forEach((parkingarea) => {
                         parkingCounter[parkingarea._id] = 0;
                     });
-
-                    /* bikes.data.forEach((bike) => {
-                        const markerElement = document.createElement('div');
-                        markerElement.style.display = 'none';
-
-                        markerElement.dataset.bikeId = bike._id;
-
-                        let chargeColor =
-                            bike.charge >= 70 ? 'green' : bike.charge >= 50 ? '#FDCE06' : bike.charge >= 30 ? '#EB841F' : '#D61E2A';
-
-                        const popup = new mapboxgl.Popup({
-                            closeOnMove: true,
-                        }).setHTML(
-                            `<div>
-                            <h3>${bike._id}</h3>
-                            <div class="popup-body">
-                                <p><strong>Postion:</strong> ${bike.location.latitude}, ${bike.location.longitude}</p>
-                                <p><strong>Laddning:</strong> ${bike.charge}%</p>
-                                <p><strong>Tillgänglig:</strong> ${bike.available ? 'Ja' : 'Nej'}</p>
-                            </div>
-                        </div>`
-                        );
-
-                        const root = ReactDOM.createRoot(markerElement);
-
-                        root.render(
-                            <TbScooter
-                                style={{
-                                    backgroundColor: chargeColor,
-                                }}
-                                size={30}
-                                color='black'
-                                className='scooter-icon'
-                            />
-                        );
-
-                        const marker = new mapboxgl.Marker({
-                            element: markerElement,
-                        })
-                            .setLngLat([bike.location.longitude, bike.location.latitude])
-                            .addTo(mapRef.current)
-                            .setPopup(popup);
-                        bikesRef.current.push(marker);
-
-                        if (bike.chargingStationId && chargingCounter[bike.chargingStationId] <= 4) {
-                            let offset = chargingCounter[bike.chargingStationId];
-                            chargingCounter[bike.chargingStationId] += 1;
-                            root.render(
-                                <TbScooter
-                                    style={{
-                                        backgroundColor: chargeColor,
-                                        transform: `translate(${-5 + offset * 3}px, 20px)`,
-                                    }}
-                                    size={30}
-                                    color='black'
-                                    className='scooter-icon'
-                                />
-                            );
-                            const marker = new mapboxgl.Marker({
-                                element: markerElement,
-                            })
-                                .setLngLat([bike.location.longitude, bike.location.latitude])
-                                .addTo(mapRef.current)
-                                .setPopup(popup);
-
-                            marker._element.style.display = 'block';
-                        }
-                        if (bike.parkingAreaId && parkingCounter[bike.parkingAreaId] <= 4) {
-                            let offset = parkingCounter[bike.parkingAreaId];
-
-                            root.render(
-                                <TbScooter
-                                    style={{
-                                        backgroundColor: chargeColor,
-                                        transform: `translate(${-5 + offset * 3}px, 20px)`,
-                                    }}
-                                    size={30}
-                                    color='black'
-                                    className='scooter-icon'
-                                />
-                            );
-                            const marker = new mapboxgl.Marker({
-                                element: markerElement,
-                            })
-                                .setLngLat([bike.location.longitude, bike.location.latitude])
-                                .addTo(mapRef.current)
-                                .setPopup(popup);
-
-                            parkingCounter[bike.parkingAreaId] += 1;
-                            marker._element.style.display = 'block';
-                        }
-
-                        if (!bike.parkingAreaId && !bike.chargingStationId) {
-                            root.render(
-                                <TbScooter
-                                    style={{
-                                        backgroundColor: chargeColor,
-                                    }}
-                                    size={30}
-                                    color='black'
-                                    className='scooter-icon'
-                                />
-                            );
-                            const marker = new mapboxgl.Marker({
-                                element: markerElement,
-                            })
-                                .setLngLat([bike.location.longitude, bike.location.latitude])
-                                .addTo(mapRef.current)
-                                .setPopup(popup);
-
-                            marker._element.style.display = 'block';
-                        }
-                    }); */
 
                     bikes.data.forEach((bike) => {
                         const markerElement = document.createElement('div');
@@ -443,6 +326,10 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
             return () => clearInterval(interval);
         }
     }, [markersVisible, startSim]);
+
+    if (isTestEnvironment) {
+        return null;
+    }
 
     function createGeoJSONCircle(center, radius, numPoints = 64) {
         const toRad = (degree) => (degree * Math.PI) / 180;

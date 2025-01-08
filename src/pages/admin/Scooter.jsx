@@ -134,7 +134,7 @@ export default function Scooter() {
                 bikeId: scooter._id,
             });
 
-            const bike = await axios.put(`http://localhost:8000/api/bikes/${scooter._id}`, {
+            await axios.put(`http://localhost:8000/api/bikes/${scooter._id}`, {
                 location: newParking.data.parkingArea.location,
             });
 
@@ -148,6 +148,7 @@ export default function Scooter() {
             setLoading(false);
             setSelectedParkingArea('');
         } catch (error) {
+            console.log(error);
             setLoading(false);
             setError('Något gick fel. Försök igen.');
         }
@@ -177,7 +178,7 @@ export default function Scooter() {
                 bikeId: scooter._id,
             });
 
-            const bike = await axios.put(`http://localhost:8000/api/bikes/${scooter._id}`, {
+            await axios.put(`http://localhost:8000/api/bikes/${scooter._id}`, {
                 location: newCharging.data.chargingStation.location,
             });
 
@@ -191,6 +192,7 @@ export default function Scooter() {
             setLoading(false);
             setSelectedChargingStation('');
         } catch (error) {
+            console.log(error);
             setLoading(false);
             setError('Något gick fel. Försök igen.');
         }

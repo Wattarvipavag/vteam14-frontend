@@ -15,6 +15,7 @@ export default function User() {
                 const res = await axios.get(`http://localhost:8000/api/users/${id}`);
                 setUser(res.data.user);
             } catch (error) {
+                console.log(error);
                 navigate('/admin/users', { replace: true });
             }
         }

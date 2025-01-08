@@ -104,7 +104,7 @@ export default function AddToDbForm() {
             const formData = new FormData(e.target);
             const dataToSubmit = {};
 
-            for (const [key, value] of formData) {
+            for (const [, value] of formData) {
                 if (
                     (value === '' && route === 'cities') ||
                     (value === '' && route === 'chargingstations') ||
@@ -129,10 +129,11 @@ export default function AddToDbForm() {
                 }
             }
 
-            const res = await axios.post(`http://localhost:8000/api/${route}`, dataToSubmit);
+            await axios.post(`http://localhost:8000/api/${route}`, dataToSubmit);
             setShowForm(false);
             triggerRefresh();
         } catch (error) {
+            console.log(error);
             setError('Något gick fel. Försök igen...');
         } finally {
             setLoading(false);
