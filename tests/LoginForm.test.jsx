@@ -1,5 +1,5 @@
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { vi } from 'vitest';
 import LoginForm from '../src/components/LoginForm';
 import { RoleContextProvider } from '../src/contexts/RoleContext';
 import { useSignInWithGithub } from 'react-firebase-hooks/auth';

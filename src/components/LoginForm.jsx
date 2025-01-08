@@ -6,7 +6,7 @@ import { useRole } from '../contexts/RoleContext';
 import axios from 'axios';
 
 export default function LoginForm() {
-    const [signInWithGithub, githubUser, githubLoading, githubError] = useSignInWithGithub(auth);
+    const [signInWithGithub, , , githubLoading, githubError] = useSignInWithGithub(auth);
     const { setRole } = useRole();
     const navigate = useNavigate();
 
@@ -53,7 +53,7 @@ export default function LoginForm() {
 
             <button type='button' className='github-login-button' onClick={handleGithubLogin} disabled={githubLoading}>
                 <FaGithub />
-                {githubLoading ? 'Loading...' : 'Logga In Med GitHub'}
+                Logga In Med GitHub
             </button>
             {githubError && <p className='error-message'>GitHub Error: {githubError.message}</p>}
         </form>
