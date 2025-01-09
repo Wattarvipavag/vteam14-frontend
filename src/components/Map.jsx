@@ -13,89 +13,34 @@ import { signOut } from 'firebase/auth';
 import { useRole } from '../contexts/RoleContext';
 
 export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
+    const [markersVisible, setMarkersVisible] = useState(false);
+    const [cities, setCities] = useState([]);
+    const [bikes, setBikes] = useState([]);
+    const [chargingStations, setChargingStations] = useState([]);
+    const [parkingAreas, setParkingAreas] = useState([]);
     const mapRef = useRef();
     const mapContainerRef = useRef();
-    const [markersVisible, setMarkersVisible] = useState(false);
     const markersRef = useRef([]);
     const bikesRef = useRef([]);
     const citiesRef = useRef([]);
-    const [cities, setCities] = useState([]);
     const { startSim } = useStartSim();
     const [user] = useAuthState(auth);
     const navigate = useNavigate();
     const { setRole } = useRole();
     const token = user.accessToken;
-
     const long = parseFloat(location.longitude);
     const lat = parseFloat(location.latitude);
-
     const isTestEnvironment = import.meta.env.NODE_ENV === 'test';
 
     useEffect(() => {
-        const getCities = async () => {
-            try {
-                const res = await axios.get('http://localhost:8000/api/cities', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                setCities(res.data);
-            } catch (error) {
-                console.log(error);
-                await signOut();
-                setRole(null);
-                navigate('/');
-            }
-        };
-        getCities();
-    }, []);
-
-    useEffect(() => {
-        mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY;
-
-        mapRef.current = new mapboxgl.Map({
-            container: mapContainerRef.current,
-            center: [long, lat],
-            zoom: zoom,
-            minZoom: minZoom,
-            maxZoom: maxZoom,
-            pitch: 20,
-            style: 'mapbox://styles/mapbox/standard',
-        });
-
-        mapRef.current.on('style.load', () => {
-            mapRef.current.setConfigProperty('basemap', 'lightPreset', 'dusk');
-        });
-
-        return () => {
-            if (mapRef.current) {
-                mapRef.current.remove();
-            }
-        };
-    }, [location]);
-
-    useEffect(() => {
-        let zoomThresholdCrossed = false;
-
-        const zoomListener = () => {
-            const newZoom = mapRef.current.getZoom();
-
-            if (newZoom >= 10 && !zoomThresholdCrossed) {
-                setMarkersVisible(true);
-                zoomThresholdCrossed = true;
-            } else if (newZoom < 10 && zoomThresholdCrossed) {
-                setMarkersVisible(false);
-                zoomThresholdCrossed = false;
-            }
-        };
-
-        if (mapRef.current) {
-            mapRef.current.on('zoom', zoomListener);
-        }
-
-        if (markersVisible) {
-            if (overview) {
-                const getBikes = async () => {
+        if (overview) {
+            const fetchData = async () => {
+                try {
+                    const cities = await axios.get('http://localhost:8000/api/cities', {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
                     const bikes = await axios.get('http://localhost:8000/api/bikes', {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -111,183 +56,56 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
                             Authorization: `Bearer ${token}`,
                         },
                     });
-
-                    let chargingCounter = {};
-                    chargingStations.data.forEach((chargingstation) => {
-                        chargingCounter[chargingstation._id] = 0;
-                    });
-
-                    let parkingCounter = {};
-                    parkingAreas.data.forEach((parkingarea) => {
-                        parkingCounter[parkingarea._id] = 0;
-                    });
-
-                    bikes.data.forEach((bike) => {
-                        const markerElement = document.createElement('div');
-                        markerElement.style.display = 'none'; // Initially hidden
-                        markerElement.dataset.bikeId = bike._id;
-
-                        let chargeColor =
-                            bike.charge >= 70 ? 'green' : bike.charge >= 50 ? '#FDCE06' : bike.charge >= 30 ? '#EB841F' : '#D61E2A';
-
-                        const popup = new mapboxgl.Popup({ closeOnMove: true }).setHTML(`
-                            <div>
-                                <h3>${bike._id}</h3>
-                                <div class="popup-body">
-                                    <p><strong>Position:</strong> ${bike.location.latitude}, ${bike.location.longitude}</p>
-                                    <p><strong>Laddning:</strong> ${bike.charge}%</p>
-                                    <p><strong>Tillgänglig:</strong> ${bike.available ? 'Ja' : 'Nej'}</p>
-                                </div>
-                            </div>
-                        `);
-
-                        // ✅ Create the marker once
-                        const root = ReactDOM.createRoot(markerElement);
-                        let offset = 0; // Offset for transformation adjustment
-
-                        // ✅ Determine offset and visibility before rendering
-                        if (bike.chargingStationId && chargingCounter[bike.chargingStationId] <= 4) {
-                            offset = chargingCounter[bike.chargingStationId]++;
-                            markerElement.style.display = 'block';
-                        } else if (bike.parkingAreaId && parkingCounter[bike.parkingAreaId] <= 4) {
-                            offset = parkingCounter[bike.parkingAreaId]++;
-                            markerElement.style.display = 'block';
-                        } else if (!bike.parkingAreaId && !bike.chargingStationId) {
-                            markerElement.style.display = 'block';
-                        }
-
-                        // ✅ Perform a SINGLE render after conditions
-                        root.render(
-                            <TbScooter
-                                style={{
-                                    backgroundColor: chargeColor,
-                                    transform: `translate(${-5 + offset * 3}px, 20px)`,
-                                }}
-                                size={30}
-                                color='black'
-                                className='scooter-icon'
-                            />
-                        );
-
-                        // ✅ Create the marker once
-                        const marker = new mapboxgl.Marker({ element: markerElement })
-                            .setLngLat([bike.location.longitude, bike.location.latitude])
-                            .setPopup(popup)
-                            .addTo(mapRef.current);
-
-                        bikesRef.current.push(marker); // ✅ Pushing only once
-                    });
-                };
-
-                const getParkingAreas = async () => {
-                    try {
-                        const res = await axios.get('http://localhost:8000/api/parkingareas', {
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                            },
-                        });
-
-                        res.data.forEach((parkingArea) => {
-                            const popup = new mapboxgl.Popup({
-                                closeOnMove: true,
-                            }).setHTML(
-                                `<div>
-                                <h3>${parkingArea.name}</h3>
-                                <div class="popup-body">
-                                    <p><strong>Antal elsparkcyklar:</strong> ${parkingArea.bikes.length}</p>
-                                </div>
-                            </div>`
-                            );
-
-                            const markerElement = document.createElement('div');
-
-                            const root = ReactDOM.createRoot(markerElement);
-                            root.render(<TbParking className='parking-icon' size={50} color='white' fill='#0271c0' />);
-
-                            const marker = new mapboxgl.Marker({ element: markerElement })
-                                .setLngLat([parkingArea.location.longitude, parkingArea.location.latitude])
-                                .addTo(mapRef.current)
-                                .setPopup(popup);
-                            markersRef.current.push(marker);
-                        });
-                    } catch (error) {
-                        console.log(error);
-                    } finally {
-                        getChargingStations();
-                    }
-                };
-
-                const getChargingStations = async () => {
-                    try {
-                        const res = await axios.get('http://localhost:8000/api/chargingstations', {
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                            },
-                        });
-
-                        res.data.forEach((chargingStation) => {
-                            const popup = new mapboxgl.Popup({
-                                closeOnMove: true,
-                            }).setHTML(
-                                `<div>
-                                <h3>${chargingStation.name}</h3>
-                                <div class="popup-body">
-                                    <p><strong>Antal elsparkcyklar:</strong> ${chargingStation.bikes.length}</p>
-                                </div>
-                            </div>`
-                            );
-
-                            const markerElement = document.createElement('div');
-
-                            const root = ReactDOM.createRoot(markerElement);
-                            root.render(<TbChargingPile className='charging-icon' size={50} fill='#41ab5d' />);
-
-                            const marker = new mapboxgl.Marker({ element: markerElement })
-                                .setLngLat([chargingStation.location.longitude, chargingStation.location.latitude])
-                                .addTo(mapRef.current)
-                                .setPopup(popup);
-                            markersRef.current.push(marker);
-                        });
-                    } catch (error) {
-                        console.log(error);
-                    } finally {
-                        getBikes();
-                    }
-                };
-                getParkingAreas();
-            }
-        } else {
-            cities.forEach((city) => {
-                const cityLong = parseFloat(city.location.longitude);
-                const cityLat = parseFloat(city.location.latitude);
-
-                const markerElement = document.createElement('div');
-                markerElement.style.width = '40px';
-                markerElement.style.height = '40px';
-                markerElement.style.borderRadius = '50%';
-                markerElement.style.overflow = 'hidden';
-                markerElement.style.backgroundImage = `url(${logo})`;
-                markerElement.style.backgroundSize = 'cover';
-                markerElement.style.backgroundPosition = 'center';
-                markerElement.style.border = '2px solid black';
-
-                const marker = new mapboxgl.Marker({ element: markerElement }).setLngLat([cityLong, cityLat]).addTo(mapRef.current);
-                citiesRef.current.push(marker);
-            });
+                    setCities(cities.data);
+                    setBikes(bikes.data);
+                    setChargingStations(chargingStations.data);
+                    setParkingAreas(parkingAreas.data);
+                } catch (error) {
+                    console.log(error);
+                    await signOut();
+                    setRole(null);
+                    navigate('/');
+                }
+            };
+            fetchData();
         }
-        if (!overview) {
-            new mapboxgl.Marker({ color: 'green' }).setLngLat([long, lat]).addTo(mapRef.current);
+    }, []);
 
-            mapRef.current.on('load', () => {
+    useEffect(() => {
+        mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY;
+
+        const map = new mapboxgl.Map({
+            container: mapContainerRef.current,
+            center: [long, lat],
+            zoom: zoom,
+            minZoom: minZoom,
+            maxZoom: maxZoom,
+            pitch: 20,
+            style: 'mapbox://styles/mapbox/standard',
+        });
+
+        map.on('zoom', () => {
+            const currentZoom = map.getZoom();
+            setMarkersVisible(currentZoom >= 10);
+        });
+
+        map.on('style.load', () => {
+            map.setConfigProperty('basemap', 'lightPreset', 'dusk');
+        });
+
+        if (!overview) {
+            new mapboxgl.Marker({ color: 'green' }).setLngLat([long, lat]).addTo(map);
+
+            map.on('load', () => {
                 const radiusInMeters = 50;
                 const circle = createGeoJSONCircle([long, lat], radiusInMeters);
 
-                mapRef.current.addSource('circle-source', {
+                map.addSource('circle-source', {
                     type: 'geojson',
                     data: circle,
                 });
 
-                mapRef.current.addLayer({
+                map.addLayer({
                     id: 'circle-layer',
                     type: 'fill',
                     source: 'circle-source',
@@ -298,7 +116,7 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
                     },
                 });
 
-                mapRef.current.addLayer({
+                map.addLayer({
                     id: 'circle-outline',
                     type: 'line',
                     source: 'circle-source',
@@ -309,6 +127,20 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
                     },
                 });
             });
+        }
+
+        mapRef.current = map;
+
+        return () => map.remove();
+    }, [location]);
+
+    useEffect(() => {
+        if (markersVisible) {
+            renderChargingStationMarkers();
+            renderParkingAreaMarkers();
+            renderBikeMarkers();
+        } else {
+            renderCityMarkers();
         }
 
         if (!markersVisible && markersRef.current.length > 0 && bikesRef.current.length > 0) {
@@ -322,7 +154,7 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
             citiesRef.current.forEach((marker) => marker.remove());
             citiesRef.current = [];
         }
-    }, [location, markersVisible]);
+    }, [location, markersVisible, cities]);
 
     useEffect(() => {
         if (startSim) {
@@ -334,7 +166,6 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
                         },
                     });
 
-                    //Bikes object, keys = bikeIds
                     const bikes = res.data.data;
                     const bikeIds = Object.keys(bikes);
                     bikeIds.forEach((bikeId) => {
@@ -373,6 +204,138 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
 
     if (isTestEnvironment) {
         return null;
+    }
+
+    function renderCityMarkers() {
+        cities.forEach((city) => {
+            const markerElement = document.createElement('div');
+            markerElement.style.width = '40px';
+            markerElement.style.height = '40px';
+            markerElement.style.borderRadius = '50%';
+            markerElement.style.overflow = 'hidden';
+            markerElement.style.backgroundImage = `url(${logo})`;
+            markerElement.style.backgroundSize = 'cover';
+            markerElement.style.backgroundPosition = 'center';
+            markerElement.style.border = '2px solid black';
+
+            const marker = new mapboxgl.Marker({ element: markerElement })
+                .setLngLat([city.location.longitude, city.location.latitude])
+                .addTo(mapRef.current);
+            citiesRef.current.push(marker);
+        });
+    }
+
+    function renderBikeMarkers() {
+        let chargingCounter = {};
+        chargingStations.forEach((chargingstation) => {
+            chargingCounter[chargingstation._id] = 0;
+        });
+
+        let parkingCounter = {};
+        parkingAreas.forEach((parkingarea) => {
+            parkingCounter[parkingarea._id] = 0;
+        });
+
+        bikes.forEach((bike) => {
+            const markerElement = document.createElement('div');
+            markerElement.style.display = 'none';
+            markerElement.dataset.bikeId = bike._id;
+
+            let chargeColor = bike.charge >= 70 ? 'green' : bike.charge >= 50 ? '#FDCE06' : bike.charge >= 30 ? '#EB841F' : '#D61E2A';
+
+            const popup = new mapboxgl.Popup({ closeOnMove: true }).setHTML(`
+            <div>
+                <h3>${bike._id}</h3>
+                <div class="popup-body">
+                    <p><strong>Position:</strong> ${bike.location.latitude}, ${bike.location.longitude}</p>
+                    <p><strong>Laddning:</strong> ${bike.charge}%</p>
+                    <p><strong>Tillgänglig:</strong> ${bike.available ? 'Ja' : 'Nej'}</p>
+                </div>
+            </div>
+        `);
+
+            const root = ReactDOM.createRoot(markerElement);
+            let offset = 0;
+
+            if (bike.chargingStationId && chargingCounter[bike.chargingStationId] <= 4) {
+                offset = chargingCounter[bike.chargingStationId]++;
+                markerElement.style.display = 'block';
+            } else if (bike.parkingAreaId && parkingCounter[bike.parkingAreaId] <= 4) {
+                offset = parkingCounter[bike.parkingAreaId]++;
+                markerElement.style.display = 'block';
+            } else if (!bike.parkingAreaId && !bike.chargingStationId) {
+                markerElement.style.display = 'block';
+            }
+
+            root.render(
+                <TbScooter
+                    style={{
+                        backgroundColor: chargeColor,
+                        transform: `translate(${-5 + offset * 3}px, 20px)`,
+                    }}
+                    size={30}
+                    color='black'
+                    className='scooter-icon'
+                />
+            );
+
+            const marker = new mapboxgl.Marker({ element: markerElement })
+                .setLngLat([bike.location.longitude, bike.location.latitude])
+                .setPopup(popup)
+                .addTo(mapRef.current);
+
+            bikesRef.current.push(marker);
+        });
+    }
+
+    function renderParkingAreaMarkers() {
+        parkingAreas.forEach((parkingArea) => {
+            const markerElement = document.createElement('div');
+            const root = ReactDOM.createRoot(markerElement);
+            root.render(<TbParking className='parking-icon' size={50} color='white' fill='#0271c0' />);
+
+            const popup = new mapboxgl.Popup({
+                closeOnMove: true,
+            }).setHTML(
+                `<div>
+                <h3>${parkingArea.name}</h3>
+                <div class="popup-body">
+                    <p><strong>Antal elsparkcyklar:</strong> ${parkingArea.bikes.length}</p>
+                </div>
+            </div>`
+            );
+
+            const marker = new mapboxgl.Marker({ element: markerElement })
+                .setLngLat([parkingArea.location.longitude, parkingArea.location.latitude])
+                .addTo(mapRef.current)
+                .setPopup(popup);
+            markersRef.current.push(marker);
+        });
+    }
+
+    function renderChargingStationMarkers() {
+        chargingStations.forEach((chargingStation) => {
+            const markerElement = document.createElement('div');
+            const root = ReactDOM.createRoot(markerElement);
+            root.render(<TbChargingPile className='charging-icon' size={50} fill='#41ab5d' />);
+
+            const popup = new mapboxgl.Popup({
+                closeOnMove: true,
+            }).setHTML(
+                `<div>
+                <h3>${chargingStation.name}</h3>
+                <div class="popup-body">
+                    <p><strong>Antal elsparkcyklar:</strong> ${chargingStation.bikes.length}</p>
+                </div>
+            </div>`
+            );
+
+            const marker = new mapboxgl.Marker({ element: markerElement })
+                .setLngLat([chargingStation.location.longitude, chargingStation.location.latitude])
+                .addTo(mapRef.current)
+                .setPopup(popup);
+            markersRef.current.push(marker);
+        });
     }
 
     function createGeoJSONCircle(center, radius, numPoints = 64) {
