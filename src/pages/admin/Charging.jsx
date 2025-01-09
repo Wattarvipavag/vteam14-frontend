@@ -3,16 +3,24 @@ import { useParams, useNavigate } from 'react-router';
 import { TbArrowBackUp } from 'react-icons/tb';
 import axios from 'axios';
 import Map from '../../components/Map';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../config/firebaseConfig';
 
 export default function Charging() {
     const [charging, setCharging] = useState(null);
     const [city, setCity] = useState(null);
     let { id } = useParams();
     let navigate = useNavigate();
+    const [user] = useAuthState(auth);
+    const token = user.accessToken;
 
     useEffect(() => {
         async function getCharging() {
-            const res = await axios.get(`http://localhost:8000/api/chargingstations/${id}`);
+            const res = await axios.get(`http://localhost:8000/api/chargingstations/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             setCharging(res.data.chargingStation);
         }
         getCharging();
@@ -21,7 +29,11 @@ export default function Charging() {
     useEffect(() => {
         if (charging) {
             const getCity = async () => {
-                const res = await axios.get(`http://localhost:8000/api/cities/cityid/${charging.cityId}`);
+                const res = await axios.get(`http://localhost:8000/api/cities/cityid/${charging.cityId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 setCity(res.data.city.name);
             };
             getCity();

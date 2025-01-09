@@ -3,16 +3,24 @@ import { useParams, useNavigate } from 'react-router';
 import { TbArrowBackUp } from 'react-icons/tb';
 import axios from 'axios';
 import Map from '../../components/Map';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../config/firebaseConfig';
 
 export default function Parking() {
     const [parking, setParking] = useState(null);
     const [city, setCity] = useState(null);
     let { id } = useParams();
     let navigate = useNavigate();
+    const [user] = useAuthState(auth);
+    const token = user.accessToken;
 
     useEffect(() => {
         async function getParking() {
-            const res = await axios.get(`http://localhost:8000/api/parkingareas/${id}`);
+            const res = await axios.get(`http://localhost:8000/api/parkingareas/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             setParking(res.data.parkingArea);
         }
         getParking();
@@ -21,7 +29,11 @@ export default function Parking() {
     useEffect(() => {
         if (parking) {
             const getCity = async () => {
-                const res = await axios.get(`http://localhost:8000/api/cities/cityid/${parking.cityId}`);
+                const res = await axios.get(`http://localhost:8000/api/cities/cityid/${parking.cityId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 setCity(res.data.city.name);
             };
             getCity();

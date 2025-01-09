@@ -6,6 +6,11 @@ import axios from 'axios';
 import { TbScooter, TbParking, TbChargingPile } from 'react-icons/tb';
 import logo from '../images/logo.png';
 import { useStartSim } from '../contexts/DataRefreshContext';
+import { useNavigate } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../config/firebaseConfig';
+import { signOut } from 'firebase/auth';
+import { useRole } from '../contexts/RoleContext';
 
 export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
     const mapRef = useRef();
@@ -16,6 +21,10 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
     const citiesRef = useRef([]);
     const [cities, setCities] = useState([]);
     const { startSim } = useStartSim();
+    const [user] = useAuthState(auth);
+    const navigate = useNavigate();
+    const { setRole } = useRole();
+    const token = user.accessToken;
 
     const long = parseFloat(location.longitude);
     const lat = parseFloat(location.latitude);
@@ -24,8 +33,19 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
 
     useEffect(() => {
         const getCities = async () => {
-            const res = await axios.get('http://localhost:8000/api/cities');
-            setCities(res.data);
+            try {
+                const res = await axios.get('http://localhost:8000/api/cities', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setCities(res.data);
+            } catch (error) {
+                console.log(error);
+                await signOut();
+                setRole(null);
+                navigate('/');
+            }
         };
         getCities();
     }, []);
@@ -76,9 +96,21 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
         if (markersVisible) {
             if (overview) {
                 const getBikes = async () => {
-                    const bikes = await axios.get('http://localhost:8000/api/bikes');
-                    const chargingStations = await axios.get('http://localhost:8000/api/chargingstations');
-                    const parkingAreas = await axios.get('http://localhost:8000/api/parkingareas');
+                    const bikes = await axios.get('http://localhost:8000/api/bikes', {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                    const chargingStations = await axios.get('http://localhost:8000/api/chargingstations', {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                    const parkingAreas = await axios.get('http://localhost:8000/api/parkingareas', {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
 
                     let chargingCounter = {};
                     chargingStations.data.forEach((chargingstation) => {
@@ -149,7 +181,11 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
 
                 const getParkingAreas = async () => {
                     try {
-                        const res = await axios.get('http://localhost:8000/api/parkingareas');
+                        const res = await axios.get('http://localhost:8000/api/parkingareas', {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        });
 
                         res.data.forEach((parkingArea) => {
                             const popup = new mapboxgl.Popup({
@@ -183,7 +219,11 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
 
                 const getChargingStations = async () => {
                     try {
-                        const res = await axios.get('http://localhost:8000/api/chargingstations');
+                        const res = await axios.get('http://localhost:8000/api/chargingstations', {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        });
 
                         res.data.forEach((chargingStation) => {
                             const popup = new mapboxgl.Popup({
@@ -288,7 +328,11 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
         if (startSim) {
             const interval = setInterval(async () => {
                 if (markersVisible) {
-                    const res = await axios.get('http://localhost:8000/api/simulation/update');
+                    const res = await axios.get('http://localhost:8000/api/simulation/update', {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
 
                     //Bikes object, keys = bikeIds
                     const bikes = res.data.data;

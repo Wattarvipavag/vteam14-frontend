@@ -17,7 +17,12 @@ export const RoleContextProvider = ({ children }) => {
 
             if (user) {
                 try {
-                    const res = await axios.get(`http://localhost:8000/api/users/oauth/${user.uid}`);
+                    const token = await user.getIdToken(true);
+                    const res = await axios.get(`http://localhost:8000/api/users/oauth/${user.uid}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
                     setRole(res.data.user.role);
                 } catch (error) {
                     console.error('Error fetching role:', error.message);

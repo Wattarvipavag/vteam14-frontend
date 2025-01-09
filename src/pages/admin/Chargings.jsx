@@ -3,12 +3,16 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import AddButton from '../../components/AddButton';
 import { useDataRefresh } from '../../contexts/DataRefreshContext';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../config/firebaseConfig';
 
 export default function Chargings() {
     const [chargings, setChargings] = useState([]);
     const [search, setSearch] = useState('');
     const [cityNames, setCityNames] = useState({}); // Object to store city names keyed by cityId
     const { refresh } = useDataRefresh();
+    const [user] = useAuthState(auth);
+    const token = user.accessToken;
 
     const filteredChargings = chargings.filter((charging) => charging.name.toLowerCase().includes(search.toLowerCase()));
 
@@ -16,7 +20,11 @@ export default function Chargings() {
         async function fetchChargingsAndCities() {
             try {
                 // Fetch charging stations
-                const chargingsRes = await axios.get('http://localhost:8000/api/chargingstations');
+                const chargingsRes = await axios.get('http://localhost:8000/api/chargingstations', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 const chargingsData = chargingsRes.data;
                 setChargings(chargingsData);
 
@@ -27,7 +35,11 @@ export default function Chargings() {
                 const cityNameMap = {};
                 await Promise.all(
                     uniqueCityIds.map(async (id) => {
-                        const cityRes = await axios.get(`http://localhost:8000/api/cities/cityid/${id}`);
+                        const cityRes = await axios.get(`http://localhost:8000/api/cities/cityid/${id}`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        });
                         cityNameMap[id] = cityRes.data.city.name; // Map city ID to city name
                     })
                 );

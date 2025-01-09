@@ -9,28 +9,45 @@ export default function Profile() {
     const [githubUser] = useAuthState(auth);
     const [email, setEmail] = useState('');
     const [money, setMoney] = useState('');
+    const token = githubUser.accessToken;
 
     useEffect(() => {
         const getUser = async () => {
-            const res = await axios.get(`http://localhost:8000/api/users/oauth/${githubUser.uid}`);
+            const res = await axios.get(`http://localhost:8000/api/users/oauth/${githubUser.uid}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             setUser(res.data.user);
         };
         getUser();
     }, []);
 
     const handleAddEmail = async () => {
-        await axios.post(`http://localhost:8000/api/users/${user._id}`, {
-            email,
-        });
+        await axios.post(
+            `http://localhost:8000/api/users/${user._id}`,
+            { email },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
         setUser((prevUser) => ({ ...prevUser, email }));
     };
 
     const handleAddMoney = async () => {
         if (!money) return;
         const balance = parseInt(user.balance) + parseInt(money);
-        await axios.post(`http://localhost:8000/api/users/${user._id}`, {
-            balance,
-        });
+        await axios.post(
+            `http://localhost:8000/api/users/${user._id}`,
+            { balance },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
         setUser((prevUser) => ({ ...prevUser, balance }));
         setMoney('');
     };

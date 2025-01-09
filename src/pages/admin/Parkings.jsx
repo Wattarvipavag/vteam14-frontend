@@ -3,12 +3,16 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import AddButton from '../../components/AddButton';
 import { useDataRefresh } from '../../contexts/DataRefreshContext';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../config/firebaseConfig';
 
 export default function Parkings() {
     const [parkings, setParkings] = useState([]);
     const [search, setSearch] = useState('');
     const [cityNames, setCityNames] = useState({}); // Object to store city names keyed by cityId
     const { refresh } = useDataRefresh();
+    const [user] = useAuthState(auth);
+    const token = user.accessToken;
 
     const filteredParkings = parkings.filter((parking) => parking.name.toLowerCase().includes(search.toLowerCase()));
 
@@ -16,7 +20,11 @@ export default function Parkings() {
         async function fetchParkingsAndCities() {
             try {
                 // Fetch parking areas
-                const parkingsRes = await axios.get('http://localhost:8000/api/parkingareas');
+                const parkingsRes = await axios.get('http://localhost:8000/api/parkingareas', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 const parkingData = parkingsRes.data;
                 setParkings(parkingData);
 
@@ -27,7 +35,11 @@ export default function Parkings() {
                 const cityNameMap = {};
                 await Promise.all(
                     uniqueCityIds.map(async (id) => {
-                        const cityRes = await axios.get(`http://localhost:8000/api/cities/cityid/${id}`);
+                        const cityRes = await axios.get(`http://localhost:8000/api/cities/cityid/${id}`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        });
                         cityNameMap[id] = cityRes.data.city.name; // Map city ID to city name
                     })
                 );
