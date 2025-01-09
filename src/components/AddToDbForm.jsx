@@ -1,11 +1,16 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useShowForm } from '../contexts/ShowFormContext';
 import { TbX } from 'react-icons/tb';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useDataRefresh } from '../contexts/DataRefreshContext';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../config/firebaseConfig';
+import { signOut } from 'firebase/auth';
+import { useRole } from '../contexts/RoleContext';
 
 export default function AddToDbForm() {
+    const [user] = useAuthState(auth);
     const { setShowForm } = useShowForm();
     const location = useLocation();
     const route = location.pathname.split('/')[2];
@@ -18,12 +23,27 @@ export default function AddToDbForm() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const { triggerRefresh } = useDataRefresh();
+    const navigate = useNavigate();
+    const { setRole } = useRole();
 
     useEffect(() => {
         if (route === 'bikes' || route === 'parkingareas' || route === 'chargingstations') {
             const getCities = async () => {
-                const res = await axios.get('http://localhost:8000/api/cities');
-                setCities(res.data);
+                try {
+                    const token = await user.getIdToken(true);
+
+                    const res = await axios.get('http://localhost:8000/api/cities', {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                    setCities(res.data);
+                } catch (error) {
+                    console.log(error);
+                    await signOut();
+                    setRole(null);
+                    navigate('/');
+                }
             };
             getCities();
         }
@@ -34,14 +54,31 @@ export default function AddToDbForm() {
         setParkingAreasId([]);
         if (selectedCity && route === 'bikes') {
             const getParkingAreas = async () => {
-                const res = await axios.get(`http://localhost:8000/api/cities//cityid/${selectedCity}`);
-                const parkingAreasInCity = res.data.city.parkingAreas;
+                try {
+                    const token = await user.getIdToken(true);
+                    const res = await axios.get(`http://localhost:8000/api/cities//cityid/${selectedCity}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
 
-                parkingAreasInCity.map(async (area) => {
-                    const res = await axios.get(`http://localhost:8000/api/parkingareas/${area}`);
-                    setParkingAreasName((prevState) => [...prevState, res.data.parkingArea.name]);
-                    setParkingAreasId((prevState) => [...prevState, res.data.parkingArea._id]);
-                });
+                    const parkingAreasInCity = res.data.city.parkingAreas;
+
+                    parkingAreasInCity.map(async (area) => {
+                        const res = await axios.get(`http://localhost:8000/api/parkingareas/${area}`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        });
+                        setParkingAreasName((prevState) => [...prevState, res.data.parkingArea.name]);
+                        setParkingAreasId((prevState) => [...prevState, res.data.parkingArea._id]);
+                    });
+                } catch (error) {
+                    console.log(error);
+                    await signOut();
+                    setRole(null);
+                    navigate('/');
+                }
             };
             getParkingAreas();
         } else {
@@ -100,7 +137,9 @@ export default function AddToDbForm() {
         setLoading(true);
         setError('');
         e.preventDefault();
+
         try {
+            const token = await user.getIdToken(true);
             const formData = new FormData(e.target);
             const dataToSubmit = {};
 
@@ -129,11 +168,20 @@ export default function AddToDbForm() {
                 }
             }
 
-            await axios.post(`http://localhost:8000/api/${route}`, dataToSubmit);
+            await axios.post(`http://localhost:8000/api/${route}`, dataToSubmit, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             setShowForm(false);
             triggerRefresh();
         } catch (error) {
             console.log(error);
+            if (error.response?.status === 401 || error.response?.status === 403) {
+                await signOut();
+                setRole(null);
+                navigate('/');
+            }
             setError('Något gick fel. Försök igen...');
         } finally {
             setLoading(false);

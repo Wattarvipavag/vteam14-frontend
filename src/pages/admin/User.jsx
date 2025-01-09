@@ -2,17 +2,25 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { TbArrowBackUp } from 'react-icons/tb';
 import axios from 'axios';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../config/firebaseConfig';
 
 export default function User() {
     const [user, setUser] = useState(null);
     const [rentals, setRentals] = useState(null);
     let { id } = useParams();
     const navigate = useNavigate();
+    const [githubuser] = useAuthState(auth);
+    const token = githubuser.accessToken;
 
     useEffect(() => {
         async function getUser() {
             try {
-                const res = await axios.get(`http://localhost:8000/api/users/${id}`);
+                const res = await axios.get(`http://localhost:8000/api/users/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 setUser(res.data.user);
             } catch (error) {
                 console.log(error);
@@ -26,7 +34,11 @@ export default function User() {
         if (user) {
             const getRentals = async () => {
                 try {
-                    const res = await axios.get(`http://localhost:8000/api/rentals/userrentals/${user._id}`);
+                    const res = await axios.get(`http://localhost:8000/api/rentals/userrentals/${user._id}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
                     setRentals(res.data.rentals);
                 } catch (error) {
                     console.error(error);
@@ -37,7 +49,11 @@ export default function User() {
     }, [user]);
 
     const handleDelete = async () => {
-        await axios.delete(`http://localhost:8000/api/users/${id}`);
+        await axios.delete(`http://localhost:8000/api/users/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         navigate('/admin/users', { replace: true });
     };
 

@@ -14,25 +14,50 @@ export default function SideNav() {
 
 function AdminNav() {
     const [user] = useAuthState(auth);
+    const token = user.accessToken;
     const { setStartSim } = useStartSim();
 
     const handleDeleteAll = async () => {
-        await axios.delete('http://localhost:8000/api/reset');
+        await axios.delete('http://localhost:8000/api/reset', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
     };
 
     const handleDeleteAndReset = async () => {
-        await axios.delete('http://localhost:8000/api/reset');
+        await axios.delete('http://localhost:8000/api/reset', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        await axios.post('http://localhost:8000/api/reset');
+        await axios.post(
+            'http://localhost:8000/api/reset',
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
     };
 
     const handleStartSim = async () => {
-        await axios.get('http://localhost:8000/api/simulation/start');
+        await axios.get('http://localhost:8000/api/simulation/start', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         setStartSim(true);
     };
 
     const handleStopSim = async () => {
-        await axios.get('http://localhost:8000/api/simulation/stop');
+        await axios.get('http://localhost:8000/api/simulation/stop', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         setStartSim(false);
     };
 

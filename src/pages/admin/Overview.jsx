@@ -2,6 +2,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { TbMapPin, TbUsers, TbScooter, TbParking, TbChargingPile } from 'react-icons/tb';
 import Map from '../../components/Map';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../config/firebaseConfig';
 
 export default function Overview() {
     const [citiesCount, setCitiesCount] = useState(null);
@@ -9,10 +11,16 @@ export default function Overview() {
     const [scootersCount, setScootersCount] = useState(null);
     const [parkingsCount, setParkingsCount] = useState(null);
     const [chargingsCount, setChargingsCount] = useState(null);
+    const [user] = useAuthState(auth);
+    const token = user.accessToken;
 
     useEffect(() => {
         const getCounters = async () => {
-            const stats = await axios.get('http://localhost:8000/api/stats');
+            const stats = await axios.get('http://localhost:8000/api/stats', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
 
             setCitiesCount(stats.data.cities);
             setUsersCount(stats.data.users);

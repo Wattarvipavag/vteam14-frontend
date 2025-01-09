@@ -1,17 +1,36 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
+import { auth } from '../../config/firebaseConfig';
+import { useRole } from '../../contexts/RoleContext';
 
 export default function Users() {
+    const [user] = useAuthState(auth);
     const [users, setUsers] = useState([]);
     const [search, setSearch] = useState('');
+    const { setRole } = useRole();
+    const [signOut] = useSignOut(auth);
+    const navigate = useNavigate();
+    const token = user.accessToken;
 
     const filteredUsers = users.filter((user) => user.name.toLowerCase().includes(search.toLowerCase()));
 
     useEffect(() => {
         async function getUsers() {
-            const res = await axios.get('http://localhost:8000/api/users');
-            setUsers(res.data);
+            try {
+                const res = await axios.get('http://localhost:8000/api/users', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setUsers(res.data);
+            } catch (error) {
+                console.log(error);
+                await signOut();
+                setRole(null);
+                navigate('/');
+            }
         }
         getUsers();
     }, []);

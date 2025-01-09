@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router';
 import { TbArrowBackUp } from 'react-icons/tb';
 import Map from '../../components/Map';
 import axios from 'axios';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../config/firebaseConfig';
 
 export default function Scooter() {
     const [scooter, setScooter] = useState(null);
@@ -19,10 +21,16 @@ export default function Scooter() {
     const [error, setError] = useState('');
     let { id } = useParams();
     let navigate = useNavigate();
+    const [user] = useAuthState(auth);
+    const token = user.accessToken;
 
     useEffect(() => {
         async function getScooter() {
-            const res = await axios.get(`http://localhost:8000/api/bikes/${id}`);
+            const res = await axios.get(`http://localhost:8000/api/bikes/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             setScooter(res.data.bike);
         }
         getScooter();
@@ -32,14 +40,22 @@ export default function Scooter() {
         if (!scooter) return;
 
         const getCity = async () => {
-            const res = await axios.get(`http://localhost:8000/api/cities/cityid/${scooter.cityId}`);
+            const res = await axios.get(`http://localhost:8000/api/cities/cityid/${scooter.cityId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             setCity(res.data.city);
         };
         getCity();
 
         if (scooter.parkingAreaId) {
             const getParking = async () => {
-                const res = await axios.get(`http://localhost:8000/api/parkingareas/${scooter.parkingAreaId}`);
+                const res = await axios.get(`http://localhost:8000/api/parkingareas/${scooter.parkingAreaId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 setParking(res.data.parkingArea);
             };
             getParking();
@@ -47,7 +63,11 @@ export default function Scooter() {
 
         if (scooter.chargingStationId) {
             const getCharging = async () => {
-                const res = await axios.get(`http://localhost:8000/api/chargingstations/${scooter.chargingStationId}`);
+                const res = await axios.get(`http://localhost:8000/api/chargingstations/${scooter.chargingStationId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 setCharging(res.data.chargingStation);
             };
             getCharging();
@@ -59,11 +79,21 @@ export default function Scooter() {
 
         const getParkingAreasInCity = async () => {
             try {
-                const res = await axios.get(`http://localhost:8000/api/cities/cityid/${scooter.cityId}`);
+                const res = await axios.get(`http://localhost:8000/api/cities/cityid/${scooter.cityId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 const parkingAreasInCity = res.data.city.parkingAreas;
 
                 const parkingResponses = await Promise.all(
-                    parkingAreasInCity.map((area) => axios.get(`http://localhost:8000/api/parkingareas/${area}`))
+                    parkingAreasInCity.map((area) =>
+                        axios.get(`http://localhost:8000/api/parkingareas/${area}`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        })
+                    )
                 );
 
                 const names = parkingResponses.map((res) => res.data.parkingArea.name);
@@ -87,11 +117,21 @@ export default function Scooter() {
 
         const getChargingstationsInCity = async () => {
             try {
-                const res = await axios.get(`http://localhost:8000/api/cities/cityid/${scooter.cityId}`);
+                const res = await axios.get(`http://localhost:8000/api/cities/cityid/${scooter.cityId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 const chargingStationsInCity = res.data.city.chargingStations;
 
                 const chargingResponses = await Promise.all(
-                    chargingStationsInCity.map((charging) => axios.get(`http://localhost:8000/api/chargingstations/${charging}`))
+                    chargingStationsInCity.map((charging) =>
+                        axios.get(`http://localhost:8000/api/chargingstations/${charging}`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        })
+                    )
                 );
 
                 const names = chargingResponses.map((res) => res.data.chargingStation.name);
@@ -123,19 +163,34 @@ export default function Scooter() {
             if (scooter.parkingAreaId) {
                 await axios.put(`http://localhost:8000/api/parkingareas/deletebike/${scooter.parkingAreaId}`, {
                     bikeId: scooter._id,
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
             } else if (scooter.chargingStationId) {
                 await axios.put(`http://localhost:8000/api/chargingstations/deletebike/${scooter.chargingStationId}`, {
                     bikeId: scooter._id,
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
             }
 
-            const newParking = await axios.post(`http://localhost:8000/api/parkingareas/addbike/${selectedParkingArea}`, {
-                bikeId: scooter._id,
-            });
+            const newParking = await axios.post(
+                `http://localhost:8000/api/parkingareas/addbike/${selectedParkingArea}`,
+                { bikeId: scooter._id },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
 
             await axios.put(`http://localhost:8000/api/bikes/${scooter._id}`, {
                 location: newParking.data.parkingArea.location,
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             });
 
             setScooter((prevScooter) => ({
@@ -167,19 +222,34 @@ export default function Scooter() {
             if (scooter.chargingStationId) {
                 await axios.put(`http://localhost:8000/api/chargingstations/deletebike/${scooter.chargingStationId}`, {
                     bikeId: scooter._id,
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
             } else if (scooter.parkingAreaId) {
                 await axios.put(`http://localhost:8000/api/parkingareas/deletebike/${scooter.parkingAreaId}`, {
                     bikeId: scooter._id,
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
             }
 
-            const newCharging = await axios.post(`http://localhost:8000/api/chargingstations/addbike/${selectedChargingStation}`, {
-                bikeId: scooter._id,
-            });
+            const newCharging = await axios.post(
+                `http://localhost:8000/api/chargingstations/addbike/${selectedChargingStation}`,
+                { bikeId: scooter._id },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
 
             await axios.put(`http://localhost:8000/api/bikes/${scooter._id}`, {
                 location: newCharging.data.chargingStation.location,
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             });
 
             setScooter((prevScooter) => ({

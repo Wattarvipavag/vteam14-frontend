@@ -3,17 +3,25 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import AddButton from '../../components/AddButton';
 import { useDataRefresh } from '../../contexts/DataRefreshContext';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../config/firebaseConfig';
 
 export default function Scooters() {
     const [scooters, setScooters] = useState([]);
     const [search, setSearch] = useState('');
     const { refresh } = useDataRefresh();
+    const [user] = useAuthState(auth);
+    const token = user.accessToken;
 
     const filteredScooters = scooters.filter((scooter) => scooter._id.toLowerCase().includes(search.toLowerCase()));
 
     useEffect(() => {
         async function getScooters() {
-            const res = await axios.get('http://localhost:8000/api/bikes');
+            const res = await axios.get('http://localhost:8000/api/bikes', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             setScooters(res.data);
         }
         getScooters();

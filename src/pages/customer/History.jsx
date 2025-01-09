@@ -7,10 +7,15 @@ export default function History() {
     const [history, setHistory] = useState([]);
     const [githubUser] = useAuthState(auth);
     const [user, setUser] = useState(null);
+    const token = githubUser.accessToken;
 
     useEffect(() => {
         const getUser = async () => {
-            const res = await axios.get(`http://localhost:8000/api/users/oauth/${githubUser.uid}`);
+            const res = await axios.get(`http://localhost:8000/api/users/oauth/${githubUser.uid}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             setUser(res.data.user);
         };
         getUser();
@@ -19,7 +24,11 @@ export default function History() {
     useEffect(() => {
         if (user) {
             const getHistory = async () => {
-                const res = await axios.get(`http://localhost:8000/api/rentals/userrentals/${user._id}`);
+                const res = await axios.get(`http://localhost:8000/api/rentals/userrentals/${user._id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 setHistory(res.data.rentals);
             };
             getHistory();
