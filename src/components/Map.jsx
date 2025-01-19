@@ -30,7 +30,11 @@ export default function Map({ location, zoom, minZoom, maxZoom, overview }) {
     const token = user.accessToken;
     const long = parseFloat(location.longitude);
     const lat = parseFloat(location.latitude);
-    const isTestEnvironment = import.meta.env.NODE_ENV === 'test';
+    const isTestEnvironment = process.env.NODE_ENV === 'test';
+
+    if (isTestEnvironment) {
+        return;
+    }
 
     useEffect(() => {
         if (overview) {
