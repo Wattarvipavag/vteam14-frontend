@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Users from '../src/pages/admin/Users';
 import axios from 'axios';
 import { vi } from 'vitest';
-import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
+import { useAuthState} from 'react-firebase-hooks/auth';
 import * as RoleContext from '../src/contexts/RoleContext'; 
 
 vi.mock('axios');
